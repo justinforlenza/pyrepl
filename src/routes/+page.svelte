@@ -50,7 +50,8 @@ const runPython = async () => {
     class="rounded-xl overflow-hidden bg-white"
     styles={{
       '&': {
-        height: '100%'
+        height: '100%',
+        fontSize: '14pt'
       }
     }}
   />
