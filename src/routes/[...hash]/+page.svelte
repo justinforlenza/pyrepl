@@ -79,7 +79,7 @@ $: encodeCode(value)
     <button 
       class="font-sans px-6 py-1 rounded text-lg flex bg-blue-50 border-blue-4 border-1 hover:bg-blue-1 text-blue-8 gap-2 items-center"
       aria-details="copy share link to code repl"
-      on:click={() => navigator.clipboard.writeText(window.location.toString())}
+      on:click={() => {navigator.clipboard.writeText(window.location.toString()); alert('Link Copied')}}
     >
       Share
       <svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="size-5"><path d="M10 2.499a2.5 2.5 0 015 0 2.5 2.5 0 01-3.566 2.26L9.131 7.52l2.038 2.858A2.5 2.5 0 0115 12.493a2.5 2.5 0 11-4.559-1.417L8.246 8H4.949A2.501 2.501 0 010 7.495 2.5 2.5 0 014.95 7h3.312l2.37-2.84A2.488 2.488 0 0110 2.499z" fill="currentColor"></path></svg>
@@ -87,7 +87,6 @@ $: encodeCode(value)
   </div>
   <CodeMirror
     bind:value
-    nodebounce
     lang={python()}
     class="rounded-xl overflow-hidden bg-white"
     styles={{
