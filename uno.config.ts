@@ -9,8 +9,8 @@ export default defineConfig({
     presetWebFonts({
       provider: 'none',
       fonts: {
-        sans: 'Space Grotesk'
-      }
-    })
+        sans: 'Space Grotesk',
+      },
+    }),
   ],
 })

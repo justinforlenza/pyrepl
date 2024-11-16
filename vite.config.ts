@@ -15,20 +15,17 @@ export default defineConfig({
     {
       name: 'vite-plugin-pyodide',
       generateBundle: async () => {
-        const assetsDir = 'dist/assets';
-        await mkdir(assetsDir, { recursive: true });
+        const assetsDir = 'dist/assets'
+        await mkdir(assetsDir, { recursive: true })
         const files = [
           'pyodide-lock.json',
           'pyodide.asm.js',
           'pyodide.asm.wasm',
           'python_stdlib.zip',
-        ];
-        const modulePath = fileURLToPath(import.meta.resolve('pyodide'));
+        ]
+        const modulePath = fileURLToPath(import.meta.resolve('pyodide'))
         for (const file of files) {
-          await copyFile(
-            join(dirname(modulePath), file),
-            join(assetsDir, file),
-          );
+          await copyFile(join(dirname(modulePath), file), join(assetsDir, file))
         }
       },
     },
@@ -38,7 +35,7 @@ export default defineConfig({
       'svelte-codemirror-editor',
       'codemirror',
       '@codemirror/language-javascript',
-      'pyodide'
+      'pyodide',
     ],
   },
 })
