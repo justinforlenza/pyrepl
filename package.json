@@ -12,7 +12,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@fontsource/space-grotesk": "^5.1.0",
-    "@sveltejs/adapter-auto": "^3.3.1",
+    "@sveltejs/adapter-static": "^3.0.6",
     "@sveltejs/kit": "^2.8.1",
     "@sveltejs/vite-plugin-svelte": "^4.0.1",
     "@unocss/preset-uno": "^0.64.1",

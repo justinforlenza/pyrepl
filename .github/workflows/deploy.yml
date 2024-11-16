@@ -40,7 +40,7 @@ jobs:
       - name: Build Site
         env:
            BASE_PATH: '/${{ github.event.repository.name }}'
-        run: bun build
+        run: bun run build
         
       - name: Setup Pages
         uses: actions/configure-pages@v5

@@ -14,8 +14,8 @@ export default defineConfig({
     }),
     {
       name: 'vite-plugin-pyodide',
-      generateBundle: async () => {
-        const assetsDir = 'dist/assets'
+      buildStart: async () => {
+        const assetsDir = 'static/assets'
         await mkdir(assetsDir, { recursive: true })
         const files = [
           'pyodide-lock.json',
