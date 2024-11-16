@@ -46,17 +46,19 @@ const runPython = async () => {
     grid-cols-[1.2fr_minmax(400px,0.8fr)] grid-rows-[48px_1fr] grid-area-['header_header''editor_output']
   "
 >
-  <header class="grid-area-[header] flex items-center justify-between px-2">
+  <header class="grid-area-[header] flex items-center px-2">
     <h1 class="text-2xl font-bold font-sans">
       PyREPL
     </h1>
+  </header>
+  <div class="grid-area-[actions] flex items-center justify-between px-2">
     <button 
-      class=" font-sans px-6 py-1 rounded text-lg bg-slate-50 border-slate-400 border-1 hover:bg-slate-100"
+      class="font-sans px-6 py-1 rounded text-lg bg-slate-50 border-slate-400 border-1 hover:bg-slate-100"
       on:click={runPython}
     >
       Run Code
     </button>
-  </header>
+  </div>
   <CodeMirror
     bind:value 
     lang={python()}
@@ -77,11 +79,12 @@ const runPython = async () => {
 main {
   height: 100vh;
   display: grid;
-  grid-template-rows: 48px 1fr 1fr;
+  grid-template-rows: repeat(2, 48px 1fr);
   grid-template-columns: 1fr;
   grid-template-areas: 
     "header"
     "editor"
+    "actions"
     "output"
 }
 @media (min-width: theme('breakpoints.lg')) {
@@ -89,7 +92,7 @@ main {
     grid-template-columns: 1.2fr minmax(384px, 0.8fr); 
     grid-template-rows: 48px 1fr; 
     grid-template-areas: 
-      "header header"
+      "header actions"
       "editor output"; 
   }
 }
