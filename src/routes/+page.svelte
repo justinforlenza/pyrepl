@@ -4,6 +4,8 @@ import { python } from '@codemirror/lang-python'
 
 import { loadPyodide } from 'pyodide'
 
+import spinner from '../svg/spinner.svg?raw'
+
 let value = ''
 let output = ''
 
@@ -41,10 +43,7 @@ const runPython = async () => {
 </svelte:head>
 
 <main 
-  class="
-    h-screen grid gap-2 p-2 bg-slate-200 overflow-hidden
-    grid-cols-[1.2fr_minmax(400px,0.8fr)] grid-rows-[48px_1fr] grid-area-['header_header''editor_output']
-  "
+  class="gap-2 p-2 bg-slate-2 overflow-hidden"
 >
   <header class="grid-area-[header] flex items-center px-2">
     <h1 class="text-2xl font-bold font-sans">
@@ -53,9 +52,14 @@ const runPython = async () => {
   </header>
   <div class="grid-area-[actions] flex items-center justify-between px-2">
     <button 
-      class="font-sans px-6 py-1 rounded text-lg bg-slate-50 border-slate-400 border-1 hover:bg-slate-100"
+      class="font-sans px-6 py-1 rounded text-lg bg-green-50 border-green-4 border-1 hover:bg-green-1 text-green-8 relative"
+      class:text-transparent={running}
       on:click={runPython}
     >
+      {#if running}
+        <span class="hidden" aria-live="polite" aria-busy="true">Working ... </span>
+        <div class="absolute fill-green-9 h-full w-full flex justify-center items-center top-0 left-0">{@html spinner}</div>
+      {/if}
       Run Code
     </button>
   </div>
@@ -66,12 +70,15 @@ const runPython = async () => {
     styles={{
       '&': {
         height: '100%',
-        fontSize: '14pt'
+        fontSize: '1.125rem'
       }
     }}
   />
-  <pre 
-    class="grid-area-[output] bg-black rounded-xl p-2 px-4 overflow-auto {error ? 'text-red-500' : 'text-white'}"
+  <pre
+    class="grid-area-[output] bg-black rounded-xl p-2 px-4 overflow-auto text-lg {error ? 'text-red-5' : 'text-white'}"
+    role="log"
+    aria-label="code output"
+    aria-details="displays output of code after running"
   >{output}</pre>
 </main>
 
