@@ -15,7 +15,7 @@ export default defineConfig({
     {
       name: 'vite-plugin-pyodide',
       buildStart: async () => {
-        const assetsDir = 'static/assets'
+        const assetsDir = 'static/_app/immutable/nodes/'
         await mkdir(assetsDir, { recursive: true })
         const files = [
           'pyodide-lock.json',
