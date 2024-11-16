@@ -1,15 +1,18 @@
 <script lang="ts">
 import CodeMirror from 'svelte-codemirror-editor'
-import { type EditorView } from '@codemirror/view'
-import { EditorState } from "@codemirror/state"
 import { python } from '@codemirror/lang-python'
+
 
 import { loadPyodide } from 'pyodide'
 
 import spinner from '../../svg/spinner.svg?raw'
+
 import { atou, utoa } from '$lib'
 import { replaceState } from '$app/navigation'
 import { page } from '$app/stores'
+import {
+  env
+} from '$env/dynamic/public'
 
 let value = atou($page.params.hash)
 let output = ''
@@ -46,7 +49,7 @@ const encodeCode = (code: string) => {
 
   const hash = utoa(code)
 
-  if ($page.params.hash !== hash) replaceState(`/${hash}`, {})
+  if ($page.params.hash !== hash) replaceState(`${env.PUBLIC_BASE_PATH ?? ''}/${hash}`, {})
 }
 
 $: encodeCode(value)
