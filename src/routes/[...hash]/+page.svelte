@@ -1,12 +1,17 @@
 <script lang="ts">
 import CodeMirror from 'svelte-codemirror-editor'
+import { type EditorView } from '@codemirror/view'
+import { EditorState } from "@codemirror/state"
 import { python } from '@codemirror/lang-python'
 
 import { loadPyodide } from 'pyodide'
 
-import spinner from '../svg/spinner.svg?raw'
+import spinner from '../../svg/spinner.svg?raw'
+import { atou, utoa } from '$lib'
+import { replaceState } from '$app/navigation'
+import { page } from '$app/stores'
 
-let value = ''
+let value = atou($page.params.hash)
 let output = ''
 
 let error = false
@@ -32,10 +37,19 @@ const runPython = async () => {
     error = true
     // @ts-expect-error unknown types
     output = err.message
-    console.log(typeof output)
     running = false
   }
 }
+
+const encodeCode = (code: string) => {
+  if (typeof window === 'undefined' || code === '') return
+
+  const hash = utoa(code)
+
+  if ($page.params.hash !== hash) replaceState(`/${hash}`, {})
+}
+
+$: encodeCode(value)
 </script>
 
 <svelte:head>
@@ -62,9 +76,18 @@ const runPython = async () => {
       {/if}
       Run Code
     </button>
+    <button 
+      class="font-sans px-6 py-1 rounded text-lg flex bg-blue-50 border-blue-4 border-1 hover:bg-blue-1 text-blue-8 gap-2 items-center"
+      aria-details="copy share link to code repl"
+      on:click={() => navigator.clipboard.writeText(window.location.toString())}
+    >
+      Share
+      <svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="size-5"><path d="M10 2.499a2.5 2.5 0 015 0 2.5 2.5 0 01-3.566 2.26L9.131 7.52l2.038 2.858A2.5 2.5 0 0115 12.493a2.5 2.5 0 11-4.559-1.417L8.246 8H4.949A2.501 2.501 0 010 7.495 2.5 2.5 0 014.95 7h3.312l2.37-2.84A2.488 2.488 0 0110 2.499z" fill="currentColor"></path></svg>
+    </button>
   </div>
   <CodeMirror
-    bind:value 
+    bind:value
+    nodebounce
     lang={python()}
     class="rounded-xl overflow-hidden bg-white"
     styles={{
