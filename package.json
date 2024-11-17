@@ -27,7 +27,9 @@
     "vite": "^5.4.11"
   },
   "dependencies": {
+    "@battlefieldduck/xterm-svelte": "^2.0.1",
     "@codemirror/lang-python": "^6.1.6",
+    "@xterm/xterm": "^5.5.0",
     "fflate": "^0.8.2",
     "pyodide": "^0.26.4",
     "svelte-codemirror-editor": "^1.4.1"

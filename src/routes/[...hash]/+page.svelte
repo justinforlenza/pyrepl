@@ -2,6 +2,9 @@
 import CodeMirror from 'svelte-codemirror-editor'
 import { python } from '@codemirror/lang-python'
 
+import { Xterm, XtermAddon } from '@battlefieldduck/xterm-svelte'
+import type { Terminal } from '@battlefieldduck/xterm-svelte'
+
 import { loadPyodide } from 'pyodide'
 
 import spinner from '../../svg/spinner.svg?raw'
@@ -12,34 +15,42 @@ import { page } from '$app/stores'
 import { env } from '$env/dynamic/public'
 
 let value = atou($page.params.hash)
-let output = ''
 
-let error = false
 let running = false
+
+let term: Terminal
 
 const runPython = async () => {
   if (running) return
+  term.reset()
   running = true
-  output = ''
-  error = false
   const pyodide = await loadPyodide()
 
-  pyodide.runPython(`
-    import sys
-    import io
-    sys.stdout = io.StringIO()
-  `)
+  pyodide.setStdin({ stdin: () => prompt() })
+
+  pyodide.setStdout({
+    batched: (output) => {
+      console.log(output)
+      term.writeln(output)
+    },
+  })
 
   try {
     await pyodide.runPythonAsync(value)
-    output = pyodide.runPython('sys.stdout.getvalue()')
     running = false
   } catch (err) {
-    error = true
-    // @ts-expect-error unknown types
-    output = err.message
+    // console.log(err)
     running = false
+    // @ts-expect-error unknown types
+    term.write(err.message)
   }
+}
+
+const terminalLoad = async (terminal: Terminal) => {
+  const fitAddon = new (await XtermAddon.FitAddon()).FitAddon()
+  terminal.loadAddon(fitAddon)
+  fitAddon.fit()
+  term = terminal
 }
 
 const encodeCode = (code: string) => {
@@ -114,12 +125,14 @@ $: encodeCode(value)
       }
     }}
   />
-  <pre
-    class="grid-area-[output] bg-black rounded-xl p-2 px-4 overflow-auto text-lg {error ? 'text-red-5' : 'text-white'}"
-    role="log"
-    aria-label="code output"
-    aria-details="displays output of code after running"
-  >{output}</pre>
+  <Xterm 
+    options={{
+      fontSize: 18,
+
+    }}
+    onLoad={terminalLoad}
+    class='rounded-xl overflow-auto grid-area-[output]'
+  />
 </main>
 
 <style>
@@ -142,5 +155,9 @@ main {
       "header actions"
       "editor output"; 
   }
+}
+
+:global(.xterm-screen) {
+  padding: 1rem
 }
 </style>
