@@ -1,4 +1,6 @@
 <script lang="ts">
+import { onMount } from 'svelte'
+
 import CodeMirror from 'svelte-codemirror-editor'
 import { python } from '@codemirror/lang-python'
 
@@ -7,6 +9,9 @@ import { loadPyodide } from 'pyodide'
 import spinner from '../../svg/spinner.svg?raw'
 
 import { atou, utoa } from '$lib'
+import Worker from '$lib/worker?worker'
+import { eventType, type WorkerEvent } from '$lib/worker/events'
+
 import { replaceState } from '$app/navigation'
 import { page } from '$app/stores'
 import { env } from '$env/dynamic/public'
@@ -55,6 +60,28 @@ const encodeCode = (code: string) => {
 }
 
 $: encodeCode(value)
+
+onMount(() => {
+  const worker = new Worker()
+
+  worker.postMessage({
+    type: eventType.run,
+    code: 'input()',
+  })
+
+  worker.onmessage = (e: MessageEvent<WorkerEvent>) => {
+    switch (e.data.type) {
+      case eventType.stdin_request:
+        worker.postMessage({ type: 'stdin', input: prompt('Python input requested:') || '' });
+        break
+      case eventType.stdout:
+        console.log(e.data.message)
+        break
+      default:
+        break
+    }
+  }
+})
 </script>
 
 <svelte:head>

@@ -13,5 +13,8 @@
   },
   "[svelte]": {
     "editor.defaultFormatter": "biomejs.biome"
-  }
+  },
+  "cSpell.words": [
+    "pyodide"
+  ]
 }
