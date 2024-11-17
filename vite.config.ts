@@ -2,9 +2,9 @@ import { sveltekit } from '@sveltejs/kit/vite'
 import UnoCSS from '@unocss/svelte-scoped/vite'
 import { defineConfig } from 'vite'
 
-import { copyFile, mkdir } from 'fs/promises'
-import { dirname, join } from 'path'
-import { fileURLToPath } from 'url'
+import { copyFile, mkdir } from 'node:fs/promises'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 export default defineConfig({
   plugins: [
