@@ -30,9 +30,12 @@ const runPython = async () => {
     sys.stdout = io.StringIO()
   `)
 
+  pyodide.setStdin({ stdin: () => prompt() })
+
   try {
     await pyodide.runPythonAsync(value)
     output = pyodide.runPython('sys.stdout.getvalue()')
+    console.log(output)
     running = false
   } catch (err) {
     error = true
