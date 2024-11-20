@@ -53,8 +53,9 @@ const encodeCode = (code: string) => {
 
   const hash = utoa(code)
 
-  if ($page.params.hash !== hash) {}
-    // replaceState(`${env.PUBLIC_BASE_PATH ?? ''}/${hash}`, {})
+  if ($page.params.hash !== hash) {
+    replaceState(`?code=${hash}`, {})
+  }
 }
 
 $: encodeCode(value)
