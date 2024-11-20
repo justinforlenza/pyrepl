@@ -22,14 +22,6 @@ jobs:
       - name: Build Site
         run: bun run build
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: 'build/'
-
       - name: Publish to Cloudflare Pages
         id: deploy
         uses: cloudflare/wrangler-action@v3
