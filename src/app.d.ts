@@ -1,5 +1,8 @@
 
 declare global {
+  const PKG: {
+    version: string
+  }
   namespace App {
     // interface Error {}
     // interface Locals {}

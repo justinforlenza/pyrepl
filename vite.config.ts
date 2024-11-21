@@ -3,8 +3,15 @@ import UnoCSS from '@unocss/svelte-scoped/vite'
 import { defineConfig } from 'vite'
 
 import { copyFile, mkdir } from 'node:fs/promises'
+import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+
+const file = fileURLToPath(new URL('package.json', import.meta.url))
+const json = readFileSync(file, 'utf8')
+const pkg = JSON.parse(json)
+
+console.log(typeof pkg.version)
 
 export default defineConfig({
   plugins: [
@@ -48,4 +55,7 @@ export default defineConfig({
   worker: {
     format: 'es',
   },
+  define: {
+    PKG: pkg
+  }
 })

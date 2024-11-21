@@ -125,16 +125,19 @@ $: encodeCode(value)
 </script>
 
 <svelte:head>
-  <title>PyREPL - A simple Web Based Python Environment</title>
+  <title>PyREPL - Web Based Python Environment</title>
 </svelte:head>
 
 <main 
   class="gap-2 p-2 bg-slate-2 overflow-hidden"
 >
   <header class="grid-area-[header] flex items-center px-2 justify-between">
-    <h1 class="text-2xl font-bold font-sans">
-      PyREPL
-    </h1>
+    <div class="flex items-center gap-5">
+      <h1 class="text-2xl font-bold font-sans">
+        PyREPL
+      </h1>
+      <p class="text-sm font-mono text-slate-6">v{PKG.version}</p>
+    </div>
 
     <a 
       href="https://github.com/justinforlenza/pyrepl" 
