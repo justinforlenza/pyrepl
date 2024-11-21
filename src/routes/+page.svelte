@@ -23,6 +23,8 @@ let currentLine = ''
 
 let windowResize: () => void;
 
+console.log($page.url.searchParams.get('code'))
+
 let value = atou($page.url.searchParams.get('code') ?? '')
 
 let terminal: Terminal
@@ -123,7 +125,7 @@ const encodeCode = (code: string) => {
   const hash = utoa(code)
 
   if ($page.url.searchParams.get('code') !== hash) {
-    replaceState(`?code=${hash}`, {})
+    replaceState(`?code=${encodeURIComponent(hash)}`, {})
   }
 }
 
@@ -163,7 +165,10 @@ $: encodeCode(value)
     <button 
       class="hidden lg:block font-sans px-6 py-1 rounded text-lg bg-slate-50 border-slate-4 border-1 hover:bg-slate-1 text-slate-8"
       aria-details="expand output to be larger"
-      on:click={() => {expanded = !expanded}}
+      on:click={() => {
+        expanded = !expanded
+        windowResize()
+      }}
     >
       {expanded ? 'Shrink' : 'Expand'} Output
     </button>
