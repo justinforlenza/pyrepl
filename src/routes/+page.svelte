@@ -161,7 +161,7 @@ $: encodeCode(value)
 
   <div class="grid-area-[actions] flex items-center justify-center lg:justify-between px-2">
     <button 
-      class="font-sans px-6 py-1 rounded text-lg bg-slate-50 border-slate-4 border-1 hover:bg-slate-1 text-slate-8"
+      class="hidden lg:block font-sans px-6 py-1 rounded text-lg bg-slate-50 border-slate-4 border-1 hover:bg-slate-1 text-slate-8"
       aria-details="expand output to be larger"
       on:click={() => {expanded = !expanded}}
     >
