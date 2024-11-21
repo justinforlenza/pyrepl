@@ -1,27 +1,49 @@
 export const eventType = {
   run: 'RUN',
   stdin: 'STDIN',
-  stdin_request: 'STDIN_REQ',
   stdout: 'STDOUT',
-  stderr: 'STDERR'
+  stderr: 'STDERR',
+  ready: 'READY',
+  complete: 'COMPLETE',
 } as const
 
+export type EventType = (typeof eventType)[keyof typeof eventType]
 
-export type EventType = typeof eventType[keyof typeof eventType]
-
-interface RunWorkerEvent {
-  type: typeof eventType['run']
+interface RunEvent {
+  type: (typeof eventType)['run']
   code: string
 }
 
-interface StdInWorkerEvent {
-  type: typeof eventType['stdin']
-  input: string
+interface StdInEvent {
+  type: (typeof eventType)['stdin']
 }
 
-interface STDWorkerEvent {
-  type: Exclude<EventType, 'RUN' | 'STDIN'>
+interface ReadyEvent {
+  type: (typeof eventType)['ready']
+  buffers: {
+    syncBuffer: SharedArrayBuffer
+    inputBuffer: SharedArrayBuffer
+  }
+}
+
+interface StdOutEvent {
+  type: (typeof eventType)['stdout']
+  charCode: number
+}
+
+interface StdErrorEvent {
+  type: (typeof eventType)['stderr']
   message: string
 }
 
-export type WorkerEvent = RunWorkerEvent | StdInWorkerEvent | STDWorkerEvent
+interface CompleteEvent {
+  type: (typeof eventType)['complete']
+}
+
+export type WorkerEvent =
+  | RunEvent
+  | StdInEvent
+  | ReadyEvent
+  | StdOutEvent
+  | StdErrorEvent
+  | CompleteEvent
