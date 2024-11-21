@@ -21,9 +21,13 @@ let syncArray: Int32Array
 
 let currentLine = ''
 
+let windowResize: () => void;
+
 let value = atou($page.url.searchParams.get('code') ?? '')
 
 let terminal: Terminal
+
+let expanded = false
 
 let running = false
 let ready = false
@@ -45,6 +49,8 @@ const terminalReady = async () => {
   const fitAddon = new (await XtermAddon.FitAddon()).FitAddon()
   terminal.loadAddon(fitAddon)
   fitAddon.fit()
+
+  windowResize = () => fitAddon.fit()
 
   terminal.writeln('Initializing Python Environment ....')
 
@@ -124,12 +130,15 @@ const encodeCode = (code: string) => {
 $: encodeCode(value)
 </script>
 
+<svelte:window onresize={windowResize} />
+
 <svelte:head>
   <title>PyREPL - Web Based Python Environment</title>
 </svelte:head>
 
 <main 
-  class="gap-2 p-2 bg-slate-2 overflow-hidden"
+  class="gap-2 p-2 bg-slate-2 overflow-hidden transition-all"
+  class:biggerTerminal={expanded}
 >
   <header class="grid-area-[header] flex items-center px-2 justify-between">
     <div class="flex items-center gap-5">
@@ -150,9 +159,16 @@ $: encodeCode(value)
     </a>
   </header>
 
-  <div class="grid-area-[actions] flex items-center justify-center lg:justify-end gap-4 px-2">
-
+  <div class="grid-area-[actions] flex items-center justify-center lg:justify-between px-2">
     <button 
+      class="font-sans px-6 py-1 rounded text-lg bg-slate-50 border-slate-4 border-1 hover:bg-slate-1 text-slate-8"
+      aria-details="expand output to be larger"
+      on:click={() => {expanded = !expanded}}
+    >
+      {expanded ? 'Shrink' : 'Expand'} Output
+    </button>
+    <div class="flex gap-4">
+      <button 
       class="font-sans px-6 py-1 rounded text-lg bg-green-50 border-green-4 border-1 hover:bg-green-1 text-green-8 relative"
       class:text-transparent={running}
       aria-details="run code"
@@ -166,19 +182,20 @@ $: encodeCode(value)
     </button>
 
     <button 
-      class="font-sans px-6 py-1 rounded text-lg flex bg-blue-50 border-blue-4 border-1 hover:bg-blue-1 text-blue-8 gap-2 items-center"
+      class="font-sans px-6 py-1 rounded text-lg bg-blue-50 border-blue-4 border-1 hover:bg-blue-1 text-blue-8"
       aria-details="copy share link to code repl"
       on:click={() => {navigator.clipboard.writeText(window.location.toString()); alert('Link Copied')}}
     >
       Share
     </button>
+    </div>
 
   </div>
 
   <CodeMirror
     bind:value
     lang={python()}
-    class="rounded-xl overflow-hidden bg-white"
+    class="rounded-xl overflow-hidden bg-white transition-all"
     styles={{
       '&': {
         height: '100%',
@@ -195,7 +212,7 @@ $: encodeCode(value)
       fontSize: 18,
       convertEol: true
     }}
-    class='rounded-xl overflow-auto grid-area-[output]'
+    class='rounded-xl overflow-auto grid-area-[output] bg-black transition-all'
   />
 </main>
 
@@ -218,6 +235,10 @@ main {
     grid-template-areas: 
       "header actions"
       "editor output"; 
+  }
+
+  main.biggerTerminal {
+    grid-template-columns: minmax(384px, 0.8fr) 1.2fr; 
   }
 }
 
