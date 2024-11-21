@@ -7,16 +7,13 @@ const config = {
   preprocess: vitePreprocess(),
   kit: {
     adapter: adapter({
-      fallback: 'index.html'
+      fallback: 'index.html',
     }),
     paths: {
-			base: process.argv.includes('dev') ? '' : process.env.PUBLIC_BASE_PATH
-		},
-    
+      base: process.argv.includes('dev') ? '' : process.env.PUBLIC_BASE_PATH,
+    },
   },
-  compilerOptions: {
-    
-  },
+  compilerOptions: {},
 }
 
 export default config

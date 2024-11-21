@@ -21,4 +21,4 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 #pyodide static assets
-static/_app/immutable/nodes/py*
+static/_app

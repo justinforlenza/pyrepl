@@ -15,7 +15,7 @@ export default defineConfig({
     {
       name: 'vite-plugin-pyodide',
       buildStart: async () => {
-        const assetsDir = 'static/_app/immutable/nodes/'
+        const assetsDir = 'static/_app/immutable/workers/'
         await mkdir(assetsDir, { recursive: true })
         const files = [
           'pyodide-lock.json',
@@ -37,5 +37,15 @@ export default defineConfig({
       '@codemirror/language-javascript',
       'pyodide',
     ],
+  },
+  server: {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+    },
+  },
+  worker: {
+    format: 'es',
   },
 })

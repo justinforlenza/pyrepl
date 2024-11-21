@@ -1,50 +1,113 @@
 <script lang="ts">
+import { replaceState } from '$app/navigation'
+import { page } from '$app/stores'
+
+import { atou, utoa } from '$lib'
+import Worker from '$lib/worker?worker'
+import { eventType, type WorkerEvent } from '$lib/worker/events'
+
 import CodeMirror from 'svelte-codemirror-editor'
 import { python } from '@codemirror/lang-python'
 
-import { loadPyodide } from 'pyodide'
+import { Xterm, XtermAddon } from '@battlefieldduck/xterm-svelte'
+import type { Terminal } from '@battlefieldduck/xterm-svelte'
 
 import spinner from '../svg/spinner.svg?raw'
 
-import { atou, utoa } from '$lib'
-import { replaceState } from '$app/navigation'
-import { page } from '$app/stores'
-import { env } from '$env/dynamic/public'
+let worker: Worker
+
+let inputArray: Uint8Array
+let syncArray: Int32Array
+
+let currentLine = ''
 
 let value = atou($page.url.searchParams.get('code') ?? '')
-let output = ''
 
-let error = false
+let terminal: Terminal
+
 let running = false
+let ready = false
+
+let waitingForInput = false
 
 const runPython = async () => {
-  if (running) return
+  if (running || !ready) return
   running = true
-  output = ''
-  error = false
-  const pyodide = await loadPyodide()
 
-  pyodide.runPython(`
-    import sys
-    import io
-    from js import prompt
-    sys.stdout = io.StringIO()
-    __builtins__.input = prompt
-  `)
+  terminal.reset()
+  worker.postMessage({
+    type: eventType.run,
+    code: value,
+  })
+}
 
-  // pyodide.setStdin({ stdin: () => prompt() })
+const terminalReady = async () => {
+  const fitAddon = new (await XtermAddon.FitAddon()).FitAddon()
+  terminal.loadAddon(fitAddon)
+  fitAddon.fit()
 
-  // pyodide.setStdout({ batched: console.log})
+  terminal.writeln('Initializing Python Environment ....')
 
-  try {
-    await pyodide.runPythonAsync(value)
-    output = pyodide.runPython('sys.stdout.getvalue()')
-    running = false
-  } catch (err) {
-    error = true
-    // @ts-expect-error unknown types
-    output = err.message
-    running = false
+  worker = new Worker()
+
+  worker.onmessage = (e: MessageEvent<WorkerEvent>) => {
+    switch (e.data.type) {
+      case eventType.stdin:
+        waitingForInput = true
+        terminal.focus()
+        break
+      case eventType.stderr:
+        terminal.write(`\x1b[31m ${e.data.message}`)
+        break
+      case eventType.stdout:
+        terminal.write(String.fromCharCode(e.data.charCode))
+        break
+
+      case eventType.ready:
+        syncArray = new Int32Array(e.data.buffers.syncBuffer)
+        inputArray = new Uint8Array(e.data.buffers.inputBuffer)
+
+        terminal.writeln('Python Ready ')
+        ready = true
+        break
+
+      case eventType.complete:
+        running = false
+        break
+
+      default:
+        break
+    }
+  }
+}
+
+const terminalKey = async ({
+  key,
+  domEvent,
+}: { key: string; domEvent: KeyboardEvent }) => {
+  if (!waitingForInput) return
+  const printable = !domEvent.altKey && !domEvent.ctrlKey && !domEvent.metaKey
+
+  if (domEvent.key === 'Enter') {
+    terminal.write('\r\n')
+    const bytes = new TextEncoder().encode(currentLine)
+
+    inputArray.set(bytes)
+
+    Atomics.store(syncArray, 1, bytes.length)
+
+    Atomics.store(syncArray, 0, 1)
+    Atomics.notify(syncArray, 0, 1)
+    waitingForInput = false
+  } else if (domEvent.key === 'Backspace') {
+    // Backspace
+    if (currentLine.length > 0) {
+      currentLine = currentLine.slice(0, -1)
+      terminal.write('\b \b')
+    }
+  } else if (printable) {
+    currentLine += key
+    terminal.write(key)
   }
 }
 
@@ -53,7 +116,7 @@ const encodeCode = (code: string) => {
 
   const hash = utoa(code)
 
-  if ($page.params.hash !== hash) {
+  if ($page.url.searchParams.get('code') !== hash) {
     replaceState(`?code=${hash}`, {})
   }
 }
@@ -116,16 +179,21 @@ $: encodeCode(value)
     styles={{
       '&': {
         height: '100%',
-        fontSize: '1.125rem'
+        fontSize: '18px'
       }
     }}
   />
-  <pre
-    class="grid-area-[output] bg-black rounded-xl p-2 px-4 overflow-auto text-lg {error ? 'text-red-5' : 'text-white'}"
-    role="log"
-    aria-label="code output"
-    aria-details="displays output of code after running"
-  >{output}</pre>
+
+  <Xterm 
+    bind:terminal 
+    onLoad={terminalReady}
+    onKey={terminalKey}
+    options={{
+      fontSize: 18,
+      convertEol: true
+    }}
+    class='rounded-xl overflow-auto grid-area-[output]'
+  />
 </main>
 
 <style>
@@ -148,5 +216,9 @@ main {
       "header actions"
       "editor output"; 
   }
+}
+
+:global(.xterm-screen) {
+  padding: 1rem
 }
 </style>

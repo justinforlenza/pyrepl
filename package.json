@@ -1,6 +1,6 @@
 {
   "name": "pyrepl",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "type": "module",
   "license": "AGPL-3.0-only",
   "scripts": {
@@ -15,7 +15,7 @@
     "@fontsource/space-grotesk": "^5.1.0",
     "@sveltejs/kit": "^2.8.1",
     "@sveltejs/vite-plugin-svelte": "^4.0.1",
-    "@types/node": "^22.9.0",
+    "@types/node": "^22.9.1",
     "@unocss/preset-uno": "^0.64.1",
     "@unocss/preset-web-fonts": "^0.64.1",
     "@unocss/reset": "^0.64.1",
@@ -27,7 +27,9 @@
     "vite": "^5.4.11"
   },
   "dependencies": {
+    "@battlefieldduck/xterm-svelte": "^2.1.0",
     "@codemirror/lang-python": "^6.1.6",
+    "@xterm/xterm": "^5.5.0",
     "@sveltejs/adapter-static": "^3.0.6",
     "fflate": "^0.8.2",
     "pyodide": "^0.26.4",
