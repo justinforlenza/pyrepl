@@ -4,6 +4,6 @@ import { page } from '$app/stores'
 import { onMount } from 'svelte'
 
 onMount(() => {
-  goto(`/?code=${$page.params.hash}`)
+  goto(`/?code=${encodeURIComponent($page.params.hash)}`)
 })
 </script>
