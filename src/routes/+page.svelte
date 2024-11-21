@@ -107,6 +107,7 @@ const terminalKey = async ({
     Atomics.store(syncArray, 0, 1)
     Atomics.notify(syncArray, 0, 1)
     waitingForInput = false
+    currentLine = ''
   } else if (domEvent.key === 'Backspace') {
     // Backspace
     if (currentLine.length > 0) {
@@ -167,7 +168,7 @@ $: encodeCode(value)
       aria-details="expand output to be larger"
       on:click={() => {
         expanded = !expanded
-        windowResize()
+        setTimeout(windowResize, 100)
       }}
     >
       {expanded ? 'Shrink' : 'Expand'} Output
