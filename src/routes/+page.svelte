@@ -1,5 +1,5 @@
 <script lang="ts">
-import { replaceState } from '$app/navigation'
+import { goto, replaceState } from '$app/navigation'
 import { page } from '$app/stores'
 
 import { atou, utoa } from '$lib'
@@ -13,6 +13,7 @@ import { Xterm, XtermAddon } from '@battlefieldduck/xterm-svelte'
 import type { Terminal } from '@battlefieldduck/xterm-svelte'
 
 import spinner from '../svg/spinner.svg?raw'
+import { onMount } from 'svelte'
 
 let worker: Worker
 
@@ -23,9 +24,21 @@ let currentLine = ''
 
 let windowResize: () => void;
 
-console.log($page.url.searchParams.get('code'))
+let value = ''
 
-let value = atou($page.url.searchParams.get('code') ?? '')
+try {
+  value = atou($page.url.searchParams.get('code') ?? '')
+} catch (e) {
+  // @ts-expect-error error type unknown
+  if (e.name === 'InvalidCharacterError') {
+    let [url, hash] = window.location.toString().split('?code=')
+    if (hash !== undefined) {
+      window.location.assign(
+        `${url}?code=${encodeURIComponent(hash)}`
+      )
+    }
+  }
+}
 
 let terminal: Terminal
 
@@ -131,9 +144,10 @@ const encodeCode = (code: string) => {
 }
 
 $: encodeCode(value)
+
 </script>
 
-<svelte:window onresize={windowResize} />
+<svelte:window onresize={windowResize} on:error={() => console.log('aaaa')} />
 
 <svelte:head>
   <title>PyREPL - Web Based Python Environment</title>
