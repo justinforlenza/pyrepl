@@ -1,11 +1,11 @@
 import { defineConfig } from 'unocss'
 
-import presetUno from '@unocss/preset-uno'
+import presetWind from '@unocss/preset-wind3'
 import presetWebFonts from '@unocss/preset-web-fonts'
 
 export default defineConfig({
   presets: [
-    presetUno(),
+    presetWind(),
     presetWebFonts({
       provider: 'none',
       fonts: {

@@ -39,10 +39,8 @@ export default defineConfig({
   ],
   optimizeDeps: {
     exclude: [
-      'svelte-codemirror-editor',
-      'codemirror',
-      '@codemirror/language-javascript',
       'pyodide',
+      '@battlefieldduck/xterm-svelte'
     ],
   },
   server: {
