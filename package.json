@@ -16,8 +16,8 @@
     "@sveltejs/kit": "^2.19.0",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@types/node": "^22.13.10",
-    "@unocss/preset-wind3": "^66.0.0",
     "@unocss/preset-web-fonts": "^66.0.0",
+    "@unocss/preset-wind3": "^66.0.0",
     "@unocss/reset": "^66.0.0",
     "@unocss/svelte-scoped": "^66.0.0",
     "svelte": "^5.22.6",
@@ -29,11 +29,11 @@
   "dependencies": {
     "@battlefieldduck/xterm-svelte": "^2.1.0",
     "@codemirror/lang-python": "^6.1.7",
-    "@xterm/xterm": "^5.5.0",
     "@sveltejs/adapter-static": "^3.0.8",
+    "@xterm/xterm": "^5.5.0",
+    "dexie": "^4.0.11",
     "fflate": "^0.8.2",
     "pyodide": "^0.27.3",
     "svelte-codemirror-editor": "^1.4.1"
-  },
-  "packageManager": "pnpm@10.6.2"
+  }
 }

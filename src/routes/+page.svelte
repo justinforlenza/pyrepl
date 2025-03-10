@@ -3,26 +3,16 @@ import { goto, replaceState } from '$app/navigation'
 import { page } from '$app/stores'
 
 import { atou, utoa } from '$lib'
-import Worker from '$lib/worker?worker'
 import { eventType, type WorkerEvent } from '$lib/worker/events'
 
 import CodeMirror from 'svelte-codemirror-editor'
 import { python } from '@codemirror/lang-python'
 
-import { Xterm, XtermAddon } from '@battlefieldduck/xterm-svelte'
-import type { Terminal } from '@battlefieldduck/xterm-svelte'
-
 import spinner from '../svg/spinner.svg?raw'
-import { onMount } from 'svelte'
 
-let worker: Worker
+import Terminal from '../components/Terminal.svelte'
 
-let inputArray: Uint8Array
-let syncArray: Int32Array
-
-let currentLine = ''
-
-let windowResize: () => void;
+import { app } from '$lib/state'
 
 let value = ''
 
@@ -33,104 +23,22 @@ try {
   if (e.name === 'InvalidCharacterError') {
     let [url, hash] = window.location.toString().split('?code=')
     if (hash !== undefined) {
-      window.location.assign(
-        `${url}?code=${encodeURIComponent(hash)}`
-      )
+      window.location.assign(`${url}?code=${encodeURIComponent(hash)}`)
     }
   }
 }
-
-let terminal: Terminal
 
 let expanded = false
 
-let running = false
-let ready = false
-
-let waitingForInput = false
-
 const runPython = async () => {
-  if (running || !ready) return
-  running = true
+  if (app.running || !app.ready) return
+  app.running = true
 
-  terminal.reset()
-  worker.postMessage({
+  app.terminal?.reset()
+  app.worker.postMessage({
     type: eventType.run,
     code: value,
   })
-}
-
-const terminalReady = async () => {
-  const fitAddon = new (await XtermAddon.FitAddon()).FitAddon()
-  terminal.loadAddon(fitAddon)
-  fitAddon.fit()
-
-  windowResize = () => fitAddon.fit()
-
-  terminal.writeln('Initializing Python Environment ....')
-
-  worker = new Worker()
-
-  worker.onmessage = (e: MessageEvent<WorkerEvent>) => {
-    switch (e.data.type) {
-      case eventType.stdin:
-        waitingForInput = true
-        terminal.focus()
-        break
-      case eventType.stderr:
-        terminal.write(`\x1b[31m ${e.data.message}`)
-        break
-      case eventType.stdout:
-        terminal.write(String.fromCharCode(e.data.charCode))
-        break
-
-      case eventType.ready:
-        syncArray = new Int32Array(e.data.buffers.syncBuffer)
-        inputArray = new Uint8Array(e.data.buffers.inputBuffer)
-
-        terminal.writeln('Python Ready ')
-        ready = true
-        break
-
-      case eventType.complete:
-        running = false
-        break
-
-      default:
-        break
-    }
-  }
-}
-
-const terminalKey = async ({
-  key,
-  domEvent,
-}: { key: string; domEvent: KeyboardEvent }) => {
-  if (!waitingForInput) return
-  const printable = !domEvent.altKey && !domEvent.ctrlKey && !domEvent.metaKey
-
-  if (domEvent.key === 'Enter') {
-    terminal.write('\r\n')
-    const bytes = new TextEncoder().encode(currentLine)
-
-    inputArray.set(bytes)
-
-    Atomics.store(syncArray, 1, bytes.length)
-
-    Atomics.store(syncArray, 0, 1)
-    Atomics.notify(syncArray, 0, 1)
-    waitingForInput = false
-    currentLine = ''
-  } else if (domEvent.key === 'Backspace') {
-    // Backspace
-    if (currentLine.length > 0) {
-      currentLine = currentLine.slice(0, -1)
-      terminal.write('\b \b')
-    }
-  } else if (printable) {
-    currentLine += key
-    terminal.write(key)
-  }
 }
 
 const encodeCode = (code: string) => {
@@ -144,10 +52,9 @@ const encodeCode = (code: string) => {
 }
 
 $: encodeCode(value)
-
 </script>
 
-<svelte:window onresize={windowResize} on:error={() => console.log('aaaa')} />
+<svelte:window onresize={app.resize} />
 
 <svelte:head>
   <title>PyREPL - Web Based Python Environment</title>
@@ -186,7 +93,7 @@ $: encodeCode(value)
       on:click={() => {
         expanded = !expanded
         setTimeout(()=> {
-          windowResize()
+          app.resize()
         }, 250)
       }}
     >
@@ -199,11 +106,11 @@ $: encodeCode(value)
     <div class="flex gap-4">
       <button 
         class="font-sans px-6 py-1 rounded text-lg bg-green-50 border-green-4 border-1 hover:bg-green-1 text-green-8 relative"
-        class:text-transparent={running}
+        class:text-transparent={app.running}
         aria-details="run code"
         on:click={runPython}
       >
-        {#if running}
+        {#if app.running}
           <span class="hidden" aria-live="polite" aria-busy="true">Working ... </span>
           <div class="absolute fill-green-9 h-full w-full flex justify-center items-center top-0 left-0">{@html spinner}</div>
         {/if}
@@ -233,16 +140,7 @@ $: encodeCode(value)
     }}
   />
 
-  <Xterm 
-    bind:terminal 
-    onLoad={terminalReady}
-    onKey={terminalKey}
-    options={{
-      fontSize: 18,
-      convertEol: true
-    }}
-    class='rounded-xl overflow-auto grid-area-[output] bg-black transition-all'
-  />
+  <Terminal />
 </main>
 
 <style>
