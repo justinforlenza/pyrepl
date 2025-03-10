@@ -7,6 +7,8 @@ class AppState {
   running: boolean = $state(false)
   worker: Worker
   resize: () => void = $state(() => {})
+  expanded: boolean = $state(false)
+  value: string = $state('')
 
   constructor() {
     this.worker = new Worker()
