@@ -3,10 +3,10 @@
 
 
 import { goto } from '$app/navigation'
-import { page } from '$app/stores'
+import { page } from '$app/state'
 import { onMount } from 'svelte'
 
 onMount(() => {
-  goto(`/?code=${encodeURIComponent($page.params.hash)}`)
+  goto(`/?code=${encodeURIComponent(page.params.hash)}`)
 })
 </script>

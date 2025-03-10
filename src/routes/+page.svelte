@@ -1,6 +1,6 @@
 <script lang="ts">
 import { replaceState } from '$app/navigation'
-import { page } from '$app/stores'
+import { page } from '$app/state'
 
 import CodeMirror from 'svelte-codemirror-editor'
 import { python } from '@codemirror/lang-python'
@@ -12,7 +12,7 @@ import { app } from '$lib/state'
 import { atou, utoa } from '$lib'
 
 try {
-  app.value = atou($page.url.searchParams.get('code') ?? '')
+  app.value = atou(page.url.searchParams.get('code') ?? '')
 } catch (e) {
   // @ts-expect-error error type unknown
   if (e.name === 'InvalidCharacterError') {
@@ -28,7 +28,7 @@ const encodeCode = (code: string) => {
 
   const hash = utoa(code)
 
-  if ($page.url.searchParams.get('code') !== hash) {
+  if (page.url.searchParams.get('code') !== hash) {
     replaceState(`?code=${encodeURIComponent(hash)}`, {})
   }
 }
