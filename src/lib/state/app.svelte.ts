@@ -1,4 +1,5 @@
-import type { Terminal } from "@battlefieldduck/xterm-svelte"
+import type { Terminal } from '@battlefieldduck/xterm-svelte'
+
 import Worker from '$lib/worker?worker'
 
 class AppState {
@@ -17,6 +18,4 @@ class AppState {
 
 const app = new AppState()
 
-export {
-  app
-}
+export { app }
