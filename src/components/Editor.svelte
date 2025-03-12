@@ -9,29 +9,29 @@ import { app } from '$lib/state'
 import { atou, utoa } from '$lib'
 
 
-try {
-  app.value = atou(page.url.searchParams.get('code') ?? '')
-} catch (e) {
-  // @ts-expect-error error type unknown
-  if (e.name === 'InvalidCharacterError') {
-    let [url, hash] = window.location.toString().split('?code=')
-    if (hash !== undefined) {
-      window.location.assign(`${url}?code=${encodeURIComponent(hash)}`)
-    }
-  }
-}
+// try {
+//   app.value = atou(page.url.searchParams.get('code') ?? '')
+// } catch (e) {
+//   // @ts-expect-error error type unknown
+//   if (e.name === 'InvalidCharacterError') {
+//     let [url, hash] = window.location.toString().split('?code=')
+//     if (hash !== undefined) {
+//       window.location.assign(`${url}?code=${encodeURIComponent(hash)}`)
+//     }
+//   }
+// }
 
-const encodeCode = (code: string) => {
-  if (typeof window === 'undefined' || code === '') return
+// const encodeCode = (code: string) => {
+//   if (typeof window === 'undefined' || code === '') return
 
-  const hash = utoa(code)
+//   const hash = utoa(code)
 
-  if (page.url.searchParams.get('code') !== hash) {
-    replaceState(`?code=${encodeURIComponent(hash)}`, {})
-  }
-}
+//   if (page.url.searchParams.get('code') !== hash) {
+//     replaceState(`?code=${encodeURIComponent(hash)}`, {})
+//   }
+// }
 
-$: encodeCode(app.value)
+// $: encodeCode(app.value)
 </script>
 
 

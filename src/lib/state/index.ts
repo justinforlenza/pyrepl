@@ -1,1 +1,2 @@
-export {app} from "./app.svelte"
+export { app } from './app.svelte'
+export { repls } from './repls.svelte'

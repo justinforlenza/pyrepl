@@ -1,11 +1,19 @@
 <script lang="ts">
+import { onMount } from 'svelte'
+
 import Terminal from '../components/Terminal.svelte'
 import Actions from '../components/Actions.svelte'
 import Editor from '../components/Editor.svelte'
 import Header from '../components/Header.svelte'
 // import Welcome from '../components/Welcome.svelte'
 
-import { app } from '$lib/state'
+import { repls, app } from '$lib/state'
+
+$effect(() => {
+  if (repls.ready) {
+    
+  }
+})
 </script>
 
 <svelte:window onresize={app.resize} />
