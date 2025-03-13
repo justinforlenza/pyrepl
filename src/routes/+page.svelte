@@ -9,9 +9,23 @@ import Header from '../components/Header.svelte'
 
 import { repls, app } from '$lib/state'
 
+let lastLoadedId = $state('')
+
+$effect(() => {
+  if (repls.ready && lastLoadedId !== repls.current) {
+    lastLoadedId = repls.current ?? ''
+    console.debug('[pyrepl] loading value from indexedb')
+    app.value = repls.getCurrentRepl()?.code ?? ''
+  }
+})
+
 $effect(() => {
   if (repls.ready) {
-    
+    const current_value = repls.getCurrentRepl()?.code ?? ''
+    if (app.value !== current_value) {
+      console.debug('[pyrepl] updating code in indexedb')
+      repls.updateCurrentRepl(app.value)
+    }
   }
 })
 </script>

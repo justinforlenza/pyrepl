@@ -5,11 +5,20 @@ class REPLState {
 
   ready: boolean = $state(false)
 
-  currentRepl: string | null = $state(localStorage.getItem('currentRepl'))
+  current: string | null = $state(localStorage.getItem('currentRepl'))
 
-  setCurrentRepl(id: string) {
-    this.currentRepl = id
+  setCurrent(id: string) {
+    this.current = id
     localStorage.setItem('currentRepl', id)
+  }
+
+  getCurrentRepl() {
+    return this.data.findOne({ id: { $eq: this.current ?? '' } })
+  }
+
+  updateCurrentRepl(code: string) {
+    if (this.current === null || !this.ready) return
+    this.data.updateOne({ id: { $eq: this.current } }, { $set: { code, updated: new Date().toISOString() } })
   }
 
   constructor() {
@@ -19,14 +28,14 @@ class REPLState {
       if (count === 0) {
         const id = await this.data.create()
 
-        this.setCurrentRepl(id)
+        this.setCurrent(id)
       } else {
-        const repl = this.data.findOne({ id: { $eq: this.currentRepl ?? '' } })
+        const repl = this.data.findOne({ id: { $eq: this.current ?? '' } })
         if (repl === undefined) {
           const repl = this.data.findOne({})
 
           // biome-ignore lint/style/noNonNullAssertion: based on the original if, repl is not undefined
-          this.setCurrentRepl(repl!.id)
+          this.setCurrent(repl!.id)
         }
       }
 
