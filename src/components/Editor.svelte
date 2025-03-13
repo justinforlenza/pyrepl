@@ -38,7 +38,7 @@ import { atou, utoa } from '$lib'
 <CodeMirror
   bind:value={app.value}
   lang={python()}
-  class="rounded-xl overflow-hidden bg-white transition-all"
+  class="rounded-lg overflow-hidden bg-white transition-all border-1 border-slate-4"
   styles={{
     '&': {
       height: '100%',

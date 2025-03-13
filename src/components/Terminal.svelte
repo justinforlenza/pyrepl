@@ -94,5 +94,5 @@ const terminalKey = async ({
     fontSize: 18,
     convertEol: true
   }}
-  class='rounded-xl overflow-auto grid-area-[output] bg-black transition-all'
+  class='rounded-lg overflow-auto grid-area-[output] bg-black transition-all'
 />
