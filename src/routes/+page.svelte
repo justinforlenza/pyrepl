@@ -7,30 +7,30 @@ import Editor from '../components/Editor.svelte'
 import Header from '../components/Header.svelte'
 // import Welcome from '../components/Welcome.svelte'
 
-import { repls, app } from '$lib/state'
+import { repls, terminal, worker, editor } from '$lib/state'
 
 let lastLoadedId = $state('')
 
 $effect(() => {
   if (repls.ready && lastLoadedId !== repls.current) {
     lastLoadedId = repls.current ?? ''
-    console.debug('[pyrepl] loading value from indexedb')
-    app.value = repls.getCurrentRepl()?.code ?? ''
+    console.debug('[pyrepl] loading code from indexedb')
+    editor.value = repls.getCurrentRepl()?.code ?? ''
   }
 })
 
 $effect(() => {
   if (repls.ready) {
     const current_value = repls.getCurrentRepl()?.code ?? ''
-    if (app.value !== current_value) {
+    if (editor.value !== current_value) {
       console.debug('[pyrepl] updating code in indexedb')
-      repls.updateCurrentRepl(app.value)
+      repls.updateCurrentRepl(editor.value)
     }
   }
 })
 </script>
 
-<svelte:window onresize={app.resize} />
+<svelte:window onresize={terminal.resize} />
 
 <svelte:head>
   <title>PyREPL - Web Based Python Environment</title>
@@ -38,7 +38,7 @@ $effect(() => {
 <!-- <Welcome /> -->
 <main 
   class="gap-2 p-2 bg-slate-2 overflow-hidden transition-all"
-  class:biggerTerminal={app.expanded}
+  class:biggerTerminal={terminal.expanded}
 >
   <Header />
 
@@ -75,7 +75,7 @@ main {
   }
 }
 
-:global(.xterm-screen) {
+:global(.xterm) {
   padding: 1rem
 }
 </style>

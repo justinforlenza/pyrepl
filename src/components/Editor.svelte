@@ -5,7 +5,7 @@ import { page } from '$app/state'
 import CodeMirror from 'svelte-codemirror-editor'
 import { python } from '@codemirror/lang-python'
 
-import { app } from '$lib/state'
+import { editor } from '$lib/state'
 import { atou, utoa } from '$lib'
 
 
@@ -36,7 +36,7 @@ import { atou, utoa } from '$lib'
 
 
 <CodeMirror
-  bind:value={app.value}
+  bind:value={editor.value}
   lang={python()}
   class="rounded-lg overflow-hidden bg-white transition-all border-1 border-slate-4"
   styles={{
