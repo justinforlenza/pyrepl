@@ -14,7 +14,10 @@ export type ButtonProps = WithElementRef<HTMLButtonAttributes> &
 let { variant = 'default', children, class: classes, loading = false, ...restProps }: ButtonProps = $props()
 </script>
 
-<button 
+
+
+<svelte:element
+  this="{restProps.href ? 'a' : 'button'}" 
   class="lg:block font-sans px-5 py-2 rounded text-lg border-1 relative {variant} {classes} {loading ? '!text-transparent' : ''}"
   {...restProps}
 >
@@ -23,7 +26,7 @@ let { variant = 'default', children, class: classes, loading = false, ...restPro
     <div class="absolute fill-green-9 h-full w-full flex justify-center items-center top-0 left-0">{@html spinner}</div>
   {/if}
   {@render children?.()}
-</button>
+</svelte:element>
 
 <style>
 .default {
