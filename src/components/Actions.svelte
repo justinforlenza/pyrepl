@@ -4,7 +4,7 @@ import { eventType } from '$lib/worker/events'
 
 import Button from './ui/Button.svelte'
 
-const runPython = async () => {
+function runPython() {
   if (app.running || !app.ready) return
   app.running = true
 
@@ -13,6 +13,11 @@ const runPython = async () => {
     type: eventType.run,
     code: app.value,
   })
+}
+
+function shareCode() {
+  navigator.clipboard.writeText(window.location.toString())
+  alert('Link Copied')
 }
 </script>
 <svelte:options runes={true} />
@@ -50,7 +55,7 @@ const runPython = async () => {
     <Button 
       variant="blue"
       aria-details="copy share link to code repl"
-      onclick={() => {navigator.clipboard.writeText(window.location.toString()); alert('Link Copied')}}
+      onclick={shareCode}
     >
       Share
     </Button>
