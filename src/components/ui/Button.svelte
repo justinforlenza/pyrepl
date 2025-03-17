@@ -18,7 +18,7 @@ let { variant = 'default', children, class: classes, loading = false, ...restPro
 
 <svelte:element
   this="{restProps.href ? 'a' : 'button'}" 
-  class="lg:block font-sans px-5 py-2 rounded text-lg border-1 relative {variant} {classes} {loading ? '!text-transparent' : ''}"
+  class="font-sans px-5 py-2 rounded text-lg border-1 relative {variant} {classes} {loading ? '!text-transparent' : ''}"
   {...restProps}
 >
   {#if loading}

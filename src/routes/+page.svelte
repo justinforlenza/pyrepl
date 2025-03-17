@@ -1,30 +1,29 @@
 <script lang="ts">
-import { onMount } from 'svelte'
-
 import Terminal from '../components/Terminal.svelte'
 import Actions from '../components/Actions.svelte'
 import Editor from '../components/Editor.svelte'
 import Header from '../components/Header.svelte'
-// import Welcome from '../components/Welcome.svelte'
 
-import { repls, terminal, worker, editor } from '$lib/state'
+import { db, terminal, editor } from '$lib/state'
 
 let lastLoadedId = $state('')
 
 $effect(() => {
-  if (repls.ready && lastLoadedId !== repls.current) {
-    lastLoadedId = repls.current ?? ''
+  if (db.ready && lastLoadedId !== db.currentReplId) {
+    lastLoadedId = db.currentReplId ?? ''
     console.debug('[pyrepl] loading code from indexedb')
-    editor.value = repls.getCurrentRepl()?.code ?? ''
+    editor.value = db.getCurrentRepl()?.code ?? ''
   }
 })
 
 $effect(() => {
-  if (repls.ready) {
-    const current_value = repls.getCurrentRepl()?.code ?? ''
-    if (editor.value !== current_value) {
+  if (db.ready) {
+    const currentRepl = db.getCurrentRepl()
+    if (currentRepl === undefined) {
+      console.warn('[pyrepl] unable to find current repl')
+    } else if (editor.value !== currentRepl.code) {
       console.debug('[pyrepl] updating code in indexedb')
-      repls.updateCurrentRepl(editor.value)
+      db.updateCurrentRepl(editor.value)
     }
   }
 })
@@ -76,6 +75,6 @@ main {
 }
 
 :global(.xterm) {
-  padding: 1rem
+  padding: 1rem 1rem 4px;
 }
 </style>

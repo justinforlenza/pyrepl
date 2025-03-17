@@ -1,7 +1,5 @@
 <script lang="ts">
-    import Button from "./ui/Button.svelte";
-
-   
+import Button from './ui/Button.svelte'
 </script>
 
 <header class="grid-area-[header] flex items-center px-2 justify-between">
