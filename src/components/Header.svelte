@@ -2,14 +2,35 @@
 import Button from './ui/Button.svelte'
 import { db } from '$lib/state'
 
-let isEditing = $state(false)
-let editValue = $state('')
-let inputElement: HTMLInputElement | undefined = $state()
+const MIN_INPUT_WIDTH = 200
 
-function startEdit() {
+let newName = $state('')
+let isEditing = $state(false)
+let inputWidth = $state(100)
+
+let inputElement: HTMLInputElement | undefined = $state()
+let measureElement: HTMLSpanElement | undefined = $state()
+
+$effect(() => {
+  if (measureElement && newName) {
+    const newWidth = measureElement.offsetWidth + 4
+    if (newWidth < MIN_INPUT_WIDTH) {
+      inputWidth = MIN_INPUT_WIDTH
+    } else {
+      inputWidth = newWidth
+    }
+  } else {
+    inputWidth = MIN_INPUT_WIDTH
+  }
+})
+
+$effect(() => {
   if (!db.ready) return
   const currentRepl = db.getCurrentRepl()
-  editValue = currentRepl?.name ?? 'Untitled'
+  newName = currentRepl?.name ?? 'Untitled'
+})
+
+function startEdit() {
   isEditing = true
 
   // Focus input after it's rendered
@@ -22,8 +43,8 @@ function startEdit() {
 }
 
 function saveEdit() {
-  if (editValue.trim() !== '') {
-    db.updateCurrentReplName(editValue)
+  if (newName.trim() !== '') {
+    db.updateCurrentReplName(newName)
   }
   isEditing = false
 }
@@ -52,23 +73,34 @@ function handleKeydown(e: KeyboardEvent) {
     <div class="text-slate-4 text-3xl">
       /
     </div>
-    {#if isEditing}
-      <input
-        bind:this={inputElement}
-        bind:value={editValue}
-        onkeydown={handleKeydown}
-        onblur={saveEdit}
-        class="text-lg font-sans bg-white border-1 border-slate-4 rounded px-2 py-1 text-slate-8 outline-none focus:border-blue-4 transition-all min-w-48"
-        type="text"
-      />
-    {:else}
-      <button
-        onclick={startEdit}
-        class="text-lg font-sans text-slate-8 hover:text-slate-6 transition-all cursor-text px-2 py-1 rounded hover:bg-slate-1"
+    <div class="max-w-96 relative">
+      <span
+        bind:this={measureElement}
+        class="text-lg font-sans px-2 py-1 absolute invisible whitespace-pre"
+        aria-hidden="true"
       >
-        {db.ready ? (db.getCurrentRepl()?.name ?? 'Untitled') : 'Loading...'}
-      </button>
-    {/if}
+        {newName}
+      </span>
+      {#if isEditing}
+        <!-- Invisible span to measure text width -->
+        <input
+          bind:this={inputElement}
+          bind:value={newName}
+          onkeydown={handleKeydown}
+          onblur={saveEdit}
+          style="width: {inputWidth}px; max-width: 100%;"
+          class="text-lg font-sans bg-white border-1 border-slate-4 rounded px-2 py-1 text-slate-8 outline-none focus:border-blue-4 transition-all"
+          type="text"
+        />
+      {:else}
+        <button
+          onclick={startEdit}
+          class="text-left text-lg font-sans text-slate-8 hover:text-slate-6 transition-all cursor-text px-2 py-1 rounded hover:bg-slate-1 w-full text-ellipsis text-nowrap overflow-clip"
+        >
+          {db.ready ? (db.getCurrentRepl()?.name ?? 'Untitled') : 'Loading...'}
+        </button>
+      {/if}
+    </div>
   </div>
 
   <Button
