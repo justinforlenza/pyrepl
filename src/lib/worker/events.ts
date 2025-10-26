@@ -18,7 +18,7 @@ interface StdInEvent {
   type: (typeof eventType)['stdin']
 }
 
-interface ReadyEvent {
+export interface ReadyEvent {
   type: (typeof eventType)['ready']
   buffers: {
     syncBuffer: SharedArrayBuffer

@@ -1,7 +1,8 @@
 {
   "editor.codeActionsOnSave": {
-    "quickfix.biome": "explicit"
+    "source.fixAll.biome": "explicit"
   },
+  "editor.formatOnSave": true,
   "[javascript]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
@@ -15,6 +16,11 @@
     "editor.defaultFormatter": "biomejs.biome"
   },
   "cSpell.words": [
-    "pyodide"
+    "fflate",
+    "indexeddb",
+    "pyodide",
+    "repls",
+    "signaldb",
+    "unocss"
   ]
 }

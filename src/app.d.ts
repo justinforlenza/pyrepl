@@ -1,4 +1,3 @@
-
 declare global {
   const PKG: {
     version: string

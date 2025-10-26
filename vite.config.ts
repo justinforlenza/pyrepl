@@ -38,10 +38,7 @@ export default defineConfig({
     },
   ],
   optimizeDeps: {
-    exclude: [
-      'pyodide',
-      '@battlefieldduck/xterm-svelte'
-    ],
+    exclude: ['pyodide', '@battlefieldduck/xterm-svelte'],
   },
   server: {
     headers: {
@@ -54,6 +51,6 @@ export default defineConfig({
     format: 'es',
   },
   define: {
-    PKG: pkg
-  }
+    PKG: pkg,
+  },
 })
