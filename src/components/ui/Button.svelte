@@ -1,24 +1,34 @@
 <script lang="ts">
-import type { WithElementRef } from "bits-ui";
-import type { HTMLAnchorAttributes, HTMLButtonAttributes } from "svelte/elements";
+import type { WithElementRef } from 'bits-ui'
+import type {
+  HTMLAnchorAttributes,
+  HTMLButtonAttributes,
+} from 'svelte/elements'
 
 import spinner from '../../svg/spinner.svg?raw'
 
 export type ButtonProps = WithElementRef<HTMLButtonAttributes> &
-		WithElementRef<HTMLAnchorAttributes> & {
-			variant?: 'default' | 'blue' | 'green' | 'red'
-      loading?: boolean
-		};
+  WithElementRef<HTMLAnchorAttributes> & {
+    variant?: 'default' | 'blue' | 'green' | 'red'
+    loading?: boolean
+    size?: 'sm' | 'md'
+  }
 
-
-let { variant = 'default', children, class: classes, loading = false, ...restProps }: ButtonProps = $props()
+let {
+  variant = 'default',
+  size = 'md',
+  children,
+  class: classes,
+  loading = false,
+  ...restProps
+}: ButtonProps = $props()
 </script>
 
 
 
 <svelte:element
   this="{restProps.href ? 'a' : 'button'}" 
-  class="font-sans px-5 py-2 rounded text-lg border-1 relative {variant} {classes} {loading ? '!text-transparent' : ''}"
+  class="font-sans rounded border-1 relative {size} {variant} {classes} {loading ? '!text-transparent' : ''}"
   {...restProps}
 >
   {#if loading}
@@ -44,5 +54,13 @@ let { variant = 'default', children, class: classes, loading = false, ...restPro
 
 .red {
   --at-apply: bg-red-50 border-red-4 text-red-8 hover:bg-red-1; /**/
+}
+
+.sm {
+  --at-apply: p-2; /**/
+}
+
+.md {
+  --at-apply: px-5 py-2 text-lg; /**/
 }
 </style>
