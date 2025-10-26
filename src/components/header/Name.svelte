@@ -60,7 +60,6 @@ function handleKeydown(e: KeyboardEvent) {
     cancelEdit()
   }
 }
-
 </script>
 
 

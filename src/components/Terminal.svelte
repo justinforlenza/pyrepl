@@ -43,7 +43,10 @@ const onLoad = async (terminal: Terminal) => {
 const onKey = async ({
   key,
   domEvent,
-}: { key: string; domEvent: KeyboardEvent }) => {
+}: {
+  key: string
+  domEvent: KeyboardEvent
+}) => {
   if (!terminal.waitingForInput || terminal.el === undefined) return
   const printable = !domEvent.altKey && !domEvent.ctrlKey && !domEvent.metaKey
 

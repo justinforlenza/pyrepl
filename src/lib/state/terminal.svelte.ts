@@ -3,11 +3,11 @@ import type { Terminal } from '@battlefieldduck/xterm-svelte'
 class TerminalState {
   el: Terminal | undefined = $state()
   resize: () => void = $state(() => {})
-  expanded  = $state(false)
+  expanded = $state(false)
   currentLine = $state('')
   waitingForInput = $state(false)
 
-  reset () {
+  reset() {
     this.el?.reset()
   }
 }

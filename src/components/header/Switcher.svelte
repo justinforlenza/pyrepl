@@ -23,9 +23,9 @@ async function deleteRepl(id: string) {
 }
 
 const sortedRepls = $derived(
-  [...repls].sort((a, b) =>
-    new Date(b.updated).getTime() - new Date(a.updated).getTime()
-  )
+  [...repls].sort(
+    (a, b) => new Date(b.updated).getTime() - new Date(a.updated).getTime(),
+  ),
 )
 </script>
 

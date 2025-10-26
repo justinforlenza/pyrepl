@@ -1,6 +1,6 @@
 import { Collection, createIndex } from '@signaldb/core'
 import createIndexedDBAdapter from '@signaldb/indexeddb'
-import svelteReactivityAdapter from "@signaldb/svelte"
+import svelteReactivityAdapter from '@signaldb/svelte'
 
 export interface REPL {
   id: string
@@ -20,4 +20,3 @@ export class REPLCollection extends Collection<REPL> {
     })
   }
 }
-

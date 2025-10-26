@@ -3,7 +3,6 @@ class EditorState {
   readOnly = $state(false)
 }
 
-
 const editor = new EditorState()
 
 export { editor }

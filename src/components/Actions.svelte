@@ -15,7 +15,7 @@ function shareCode() {
   url.searchParams.set('code', hash)
   if (db.ready)
     url.searchParams.set('name', db.getCurrentRepl()?.name ?? 'untitled')
-  
+
   navigator.clipboard.writeText(url.toString())
   alert('Link Copied')
 }
