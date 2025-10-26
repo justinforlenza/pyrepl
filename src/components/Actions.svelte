@@ -1,6 +1,6 @@
 <script lang="ts">
 import { utoa } from '$lib'
-import { terminal, worker, editor } from '$lib/state'
+import { terminal, worker, editor, db } from '$lib/state'
 
 import Button from './ui/Button.svelte'
 
@@ -13,6 +13,9 @@ function shareCode() {
   const hash = utoa(editor.value)
   const url = new URL(window.location.toString())
   url.searchParams.set('code', hash)
+  if (db.ready)
+    url.searchParams.set('name', db.getCurrentRepl()?.name ?? 'untitled')
+  
   navigator.clipboard.writeText(url.toString())
   alert('Link Copied')
 }

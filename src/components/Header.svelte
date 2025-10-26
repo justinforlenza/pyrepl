@@ -3,6 +3,9 @@ import Button from './ui/Button.svelte'
 import Switcher from './header/Switcher.svelte'
 import Name from './header/Name.svelte'
 import { editor } from '$lib/state'
+import { page } from '$app/state'
+
+let sharedName = $derived(page.url.searchParams.get('name'))
 </script>
 
 <header class="grid-area-[header] flex items-center px-2 justify-between overflow-hidden">
@@ -19,6 +22,13 @@ import { editor } from '$lib/state'
       </div>
       <Name />
       <Switcher />
+    {:else if sharedName}
+      <div class="text-slate-4 scale-150 md:scale-200">
+        /
+      </div>
+      <span class="text-lg font-sans px-2 py-1">
+        {sharedName}
+      </span>
     {/if}
   </div>
   <Button

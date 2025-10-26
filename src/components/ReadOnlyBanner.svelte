@@ -2,13 +2,18 @@
 import { db, editor } from '$lib/state'
 import { goto } from '$app/navigation'
 import Button from './ui/Button.svelte'
+import { page } from '$app/state'
+
+let sharedName = $derived(page.url.searchParams.get('name'))
 
 async function saveAsNew() {
   if (!db.ready) return
 
-  const id = await db.create()
+  const id = await db.create({
+    name: sharedName ?? 'Untitled',
+    code: editor.value,
+  })
   db.setCurrentId(id)
-  db.updateCurrentRepl(editor.value)
   editor.readOnly = false
   goto('/')
 }

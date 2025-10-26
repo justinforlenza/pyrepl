@@ -1,4 +1,5 @@
 <script lang="ts">
+import { page } from '$app/state'
 import { db } from '$lib/state'
 
 const MIN_INPUT_WIDTH = 200
@@ -71,6 +72,7 @@ function handleKeydown(e: KeyboardEvent) {
   >
     {newName}
   </span>
+  
   {#if isEditing}
     <input
       bind:this={inputElement}

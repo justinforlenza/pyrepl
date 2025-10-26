@@ -1,4 +1,4 @@
-import { REPLCollection } from '$lib/db.svelte'
+import { REPLCollection, type REPL } from '$lib/db.svelte'
 import { nanoid } from 'nanoid'
 
 class DBState {
@@ -35,14 +35,17 @@ class DBState {
     )
   }
 
-  async create(name?: string): Promise<string> {
+  async create(value: Partial<REPL> = {}): Promise<string> {
     if (!this.ready) throw new Error('Database not ready')
 
-    let finalName = name ?? 'Untitled'
+    let finalName = value.name ?? 'Untitled'
 
     // If no custom name provided, check for existing "Untitled" names
-    if (!name) {
-      const existingNames = this.repls.find().fetch().map(repl => repl.name)
+    if (value.name === undefined) {
+      const existingNames = this.repls
+        .find()
+        .fetch()
+        .map((repl) => repl.name)
 
       if (existingNames.includes('Untitled')) {
         let counter = 2
@@ -56,7 +59,7 @@ class DBState {
     return await this.repls.insert({
       id: nanoid(),
       name: finalName,
-      code: '',
+      code: value.code ?? '',
       created: new Date().toISOString(),
       updated: new Date().toISOString(),
     })
@@ -91,7 +94,7 @@ class DBState {
   constructor() {
     this.repls.isReady().then(async () => {
       this.ready = true
-      
+
       const count = this.repls.find().count()
 
       if (count === 0) {
@@ -99,7 +102,9 @@ class DBState {
 
         this.setCurrentId(id)
       } else {
-        const repl = this.repls.findOne({ id: { $eq: this.currentReplId ?? '' } })
+        const repl = this.repls.findOne({
+          id: { $eq: this.currentReplId ?? '' },
+        })
         if (repl === undefined) {
           const id = this.findId()
 
