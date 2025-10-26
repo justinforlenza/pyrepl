@@ -1,6 +1,6 @@
 <script lang="ts">
+import { utoa } from '$lib'
 import { terminal, worker, editor } from '$lib/state'
-import { eventType } from '$lib/worker/events'
 
 import Button from './ui/Button.svelte'
 
@@ -10,7 +10,10 @@ function runPython() {
 }
 
 function shareCode() {
-  navigator.clipboard.writeText(window.location.toString())
+  const hash = utoa(editor.value)
+  const url = new URL(window.location.toString())
+  url.searchParams.set('code', hash)
+  navigator.clipboard.writeText(url.toString())
   alert('Link Copied')
 }
 </script>

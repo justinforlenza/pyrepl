@@ -1,5 +1,6 @@
 class EditorState {
   value = $state('')
+  readOnly = $state(false)
 }
 
 

@@ -90,6 +90,8 @@ class DBState {
 
   constructor() {
     this.repls.isReady().then(async () => {
+      this.ready = true
+      
       const count = this.repls.find().count()
 
       if (count === 0) {
@@ -108,8 +110,6 @@ class DBState {
           this.setCurrentId(id)
         }
       }
-
-      this.ready = true
     })
   }
 }

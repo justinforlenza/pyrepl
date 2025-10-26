@@ -7,6 +7,7 @@ import { page } from '$app/state'
 import { onMount } from 'svelte'
 
 onMount(() => {
+  if (page.params.hash === undefined) return
   goto(`/?code=${encodeURIComponent(page.params.hash)}`)
 })
 </script>

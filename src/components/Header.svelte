@@ -2,6 +2,7 @@
 import Button from './ui/Button.svelte'
 import Switcher from './header/Switcher.svelte'
 import Name from './header/Name.svelte'
+    import { editor } from '$lib/state';
 </script>
 
 <header class="grid-area-[header] flex items-center px-2 justify-between overflow-hidden">
@@ -12,11 +13,13 @@ import Name from './header/Name.svelte'
       </h1>
       <p class="text-xs font-mono text-slate-6 text-center">v{PKG.version}</p>
     </div>
-    <div class="text-slate-4 scale-150 md:scale-200">
-      /
-    </div>
-    <Name />
-    <Switcher />
+    {#if !editor.readOnly}
+      <div class="text-slate-4 scale-150 md:scale-200">
+        /
+      </div>
+      <Name />
+      <Switcher />
+      {/if}
   </div>
   <Button
     href="https://github.com/justinforlenza/pyrepl"

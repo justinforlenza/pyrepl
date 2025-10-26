@@ -5,11 +5,31 @@ import Editor from '../components/Editor.svelte'
 import Header from '../components/Header.svelte'
 
 import { db, terminal, editor } from '$lib/state'
+import { page } from '$app/state'
+import { atou } from '$lib'
 
 let lastLoadedId = $state('')
 
+let sharedCode = $derived(page.url.searchParams.get('code'))
+
 $effect(() => {
-  if (db.ready && lastLoadedId !== db.currentReplId) {
+  if (sharedCode !== null) {
+    try {
+      const code = atou(sharedCode)
+      if (code !== editor.value) {
+        console.debug('[pyrepl] loading shared code from url')
+        setTimeout(() => {
+          editor.value = code
+          editor.readOnly = true
+        }, 0)
+      }
+    } catch (e) {
+      // @ts-expect-error error type unknown
+      if (e.name === 'InvalidCharacterError') {
+        console.warn('[pyrepl] invalid shared code in url')
+      }
+    }
+  } else if (db.ready && lastLoadedId !== db.currentReplId) {
     lastLoadedId = db.currentReplId ?? ''
     console.debug('[pyrepl] loading code from indexedb')
     editor.value = db.getCurrentRepl()?.code ?? ''
@@ -17,7 +37,7 @@ $effect(() => {
 })
 
 $effect(() => {
-  if (db.ready) {
+  if (db.ready && !editor.readOnly) {
     const currentRepl = db.getCurrentRepl()
     if (currentRepl === undefined) {
       console.warn('[pyrepl] unable to find current repl')
