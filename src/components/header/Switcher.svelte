@@ -43,7 +43,7 @@ const sortedRepls = $derived(
     <h2 class="text-2xl font-bold text-slate-8">Your REPLs</h2>
   {/snippet}
 
-  <div class="flex flex-col gap-3">
+  <div class="flex flex-col gap-3 overflow-hidden">
     <Button
       variant="green"
       onclick={createNewRepl}
@@ -92,7 +92,9 @@ const sortedRepls = $derived(
                 variant="red"
                 size="sm"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"><path fill="none" stroke="currentColor" d="M4.5 3V1.5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1V3M0 3.5h15m-13.5 0v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-10M7.5 7v5m-3-3v3m6-3v3" stroke-width="1"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15">
+                  <path fill="none" stroke="currentColor" d="M4.5 3V1.5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1V3M0 3.5h15m-13.5 0v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-10M7.5 7v5m-3-3v3m6-3v3" stroke-width="1"/>
+                </svg>
               </Button>
             {/if}
           </div>
