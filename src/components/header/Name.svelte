@@ -63,7 +63,7 @@ function handleKeydown(e: KeyboardEvent) {
 </script>
 
 
- <div class="max-w-96 relative flex items-center gap-2">
+ <div class="relative md:max-w-96 flex items-center gap-2 overflow-hidden">
   <span
     bind:this={measureElement}
     class="text-lg font-sans px-2 py-1 absolute invisible whitespace-pre"
@@ -86,7 +86,7 @@ function handleKeydown(e: KeyboardEvent) {
   {:else}
     <button
       onclick={startEdit}
-      class="text-left text-lg font-sans text-slate-8 hover:text-slate-6 transition-all cursor-text px-2 py-1 rounded hover:bg-slate-1 w-full text-ellipsis text-nowrap overflow-clip"
+      class="text-left text-lg font-sans text-slate-8 hover:text-slate-6 transition-all cursor-text px-2 py-1 rounded hover:bg-slate-1 w-full truncate"
       aria-label={'Edit REPL name'}
     >
       {db.ready ? (db.getCurrentRepl()?.name ?? 'Untitled') : 'Loading...'}
