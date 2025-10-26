@@ -1,5 +1,7 @@
 import { Collection, createIndex } from '@signaldb/core'
 import createIndexedDBAdapter from '@signaldb/indexeddb'
+import svelteReactivityAdapter from "@signaldb/svelte"
+
 export interface REPL {
   id: string
   name: string
@@ -14,20 +16,7 @@ export class REPLCollection extends Collection<REPL> {
       name: 'repls',
       persistence: createIndexedDBAdapter('repls'),
       indices: [createIndex('id'), createIndex('name')],
-      reactivity: {
-        create() {
-          let dep = $state(0)
-          return {
-            depend() {
-              dep
-            },
-            notify() {
-              dep += 1
-            },
-          }
-        },
-        isInScope: () => !!$effect.tracking(),
-      },
+      reactivity: svelteReactivityAdapter,
     })
   }
 }

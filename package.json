@@ -31,6 +31,7 @@
     "@codemirror/lang-python": "^6.2.1",
     "@signaldb/core": "^1.7.1",
     "@signaldb/indexeddb": "^1.1.0",
+    "@signaldb/svelte": "^1.1.1",
     "@sveltejs/adapter-static": "^3.0.10",
     "@xterm/xterm": "^5.5.0",
     "bits-ui": "^2.14.1",
