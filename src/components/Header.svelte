@@ -2,7 +2,7 @@
 import Button from './ui/Button.svelte'
 import Switcher from './header/Switcher.svelte'
 import Name from './header/Name.svelte'
-    import { editor } from '$lib/state';
+import { editor } from '$lib/state'
 </script>
 
 <header class="grid-area-[header] flex items-center px-2 justify-between overflow-hidden">
@@ -19,7 +19,7 @@ import Name from './header/Name.svelte'
       </div>
       <Name />
       <Switcher />
-      {/if}
+    {/if}
   </div>
   <Button
     href="https://github.com/justinforlenza/pyrepl"
