@@ -1,6 +1,6 @@
 {
   "name": "pyrepl",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "type": "module",
   "license": "AGPL-3.0-only",
   "scripts": {
@@ -11,7 +11,7 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.3.0",
+    "@biomejs/biome": "2.3.1",
     "@fontsource/space-grotesk": "^5.2.10",
     "@sveltejs/kit": "^2.47.3",
     "@sveltejs/vite-plugin-svelte": "^6.2.1",
@@ -20,7 +20,7 @@
     "@unocss/preset-wind3": "^66.5.4",
     "@unocss/reset": "^66.5.4",
     "@unocss/svelte-scoped": "^66.5.4",
-    "svelte": "^5.42.1",
+    "svelte": "^5.42.2",
     "svelte-check": "^4.3.3",
     "typescript": "^5.9.3",
     "unocss": "^66.5.4",
