@@ -37,9 +37,25 @@ class DBState {
 
   async create(name?: string): Promise<string> {
     if (!this.ready) throw new Error('Database not ready')
+
+    let finalName = name ?? 'Untitled'
+
+    // If no custom name provided, check for existing "Untitled" names
+    if (!name) {
+      const existingNames = this.repls.find().fetch().map(repl => repl.name)
+
+      if (existingNames.includes('Untitled')) {
+        let counter = 2
+        while (existingNames.includes(`Untitled (${counter})`)) {
+          counter++
+        }
+        finalName = `Untitled (${counter})`
+      }
+    }
+
     return await this.repls.insert({
       id: nanoid(),
-      name: name ?? 'Untitled',
+      name: finalName,
       code: '',
       created: new Date().toISOString(),
       updated: new Date().toISOString(),
