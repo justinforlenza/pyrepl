@@ -1,13 +1,74 @@
 <script lang="ts">
 import Button from './ui/Button.svelte'
+import { db } from '$lib/state'
+
+let isEditing = $state(false)
+let editValue = $state('')
+let inputElement: HTMLInputElement | undefined = $state()
+
+function startEdit() {
+  if (!db.ready) return
+  const currentRepl = db.getCurrentRepl()
+  editValue = currentRepl?.name ?? 'Untitled'
+  isEditing = true
+
+  // Focus input after it's rendered
+  setTimeout(() => {
+    if (inputElement) {
+      inputElement.focus()
+      inputElement.select()
+    }
+  }, 0)
+}
+
+function saveEdit() {
+  if (editValue.trim() !== '') {
+    db.updateCurrentReplName(editValue)
+  }
+  isEditing = false
+}
+
+function cancelEdit() {
+  isEditing = false
+}
+
+function handleKeydown(e: KeyboardEvent) {
+  if (e.key === 'Enter') {
+    saveEdit()
+  } else if (e.key === 'Escape') {
+    cancelEdit()
+  }
+}
 </script>
 
 <header class="grid-area-[header] flex items-center px-2 justify-between">
   <div class="flex items-center gap-5">
-    <h1 class="text-2xl font-bold font-sans">
-      PyREPL
-    </h1>
-    <p class="text-sm font-mono text-slate-6">v{PKG.version}</p>
+    <div class="flex flex-col">
+      <h1 class="text-2xl font-bold font-sans leading-tight">
+        PyREPL
+      </h1>
+      <p class="text-xs font-mono text-slate-6 text-center">v{PKG.version}</p>
+    </div>
+    <div class="text-slate-4 text-3xl">
+      /
+    </div>
+    {#if isEditing}
+      <input
+        bind:this={inputElement}
+        bind:value={editValue}
+        onkeydown={handleKeydown}
+        onblur={saveEdit}
+        class="text-lg font-sans bg-white border-1 border-slate-4 rounded px-2 py-1 text-slate-8 outline-none focus:border-blue-4 transition-all min-w-48"
+        type="text"
+      />
+    {:else}
+      <button
+        onclick={startEdit}
+        class="text-lg font-sans text-slate-8 hover:text-slate-6 transition-all cursor-text px-2 py-1 rounded hover:bg-slate-1"
+      >
+        {db.ready ? (db.getCurrentRepl()?.name ?? 'Untitled') : 'Loading...'}
+      </button>
+    {/if}
   </div>
 
   <Button

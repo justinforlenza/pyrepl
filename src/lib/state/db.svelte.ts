@@ -25,6 +25,16 @@ class DBState {
     )
   }
 
+  updateCurrentReplName(name: string) {
+    if (this.currentReplId === null || !this.ready) return
+    const trimmedName = name.trim()
+    if (trimmedName === '') return
+    this.repls.updateOne(
+      { id: { $eq: this.currentReplId } },
+      { $set: { name: trimmedName, updated: new Date().toISOString() } },
+    )
+  }
+
   async create(name?: string): Promise<string> {
     if (!this.ready) throw new Error('Database not ready')
     return await this.repls.insert({
