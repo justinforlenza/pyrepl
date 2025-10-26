@@ -82,7 +82,6 @@ function handleKeydown(e: KeyboardEvent) {
         {newName}
       </span>
       {#if isEditing}
-        <!-- Invisible span to measure text width -->
         <input
           bind:this={inputElement}
           bind:value={newName}
@@ -91,11 +90,14 @@ function handleKeydown(e: KeyboardEvent) {
           style="width: {inputWidth}px; max-width: 100%;"
           class="text-lg font-sans bg-white border-1 border-slate-4 rounded px-2 py-1 text-slate-8 outline-none focus:border-blue-4 transition-all"
           type="text"
+          aria-label="New REPL Name"
+          placeholder="REPL name"
         />
       {:else}
         <button
           onclick={startEdit}
           class="text-left text-lg font-sans text-slate-8 hover:text-slate-6 transition-all cursor-text px-2 py-1 rounded hover:bg-slate-1 w-full text-ellipsis text-nowrap overflow-clip"
+          aria-label={'Edit REPL name'}
         >
           {db.ready ? (db.getCurrentRepl()?.name ?? 'Untitled') : 'Loading...'}
         </button>
