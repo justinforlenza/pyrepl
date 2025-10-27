@@ -1,0 +1,18 @@
+# Generated video files
+public/footage/*.mp4
+public/footage/*.webm
+public/audio/*.mp3
+out/*.mp4
+
+# Keep directory structure
+!public/footage/.gitkeep
+!public/audio/.gitkeep
+!out/.gitkeep
+
+# Environment variables
+.env
+.env.local
+
+# Remotion cache
+.remotion/
+node_modules/

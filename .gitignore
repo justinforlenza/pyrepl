@@ -22,3 +22,9 @@ vite.config.ts.timestamp-*
 
 #pyodide static assets
 static/_app
+
+# Promo generator output
+promo-generator/public/footage/*.mp4
+promo-generator/public/footage/*.webm
+promo-generator/public/audio/*.mp3
+promo-generator/out/*.mp4

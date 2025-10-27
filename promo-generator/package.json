@@ -1,0 +1,29 @@
+{
+  "name": "@pyrepl/promo-generator",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Programmatic promo video generator for PyREPL",
+  "scripts": {
+    "capture": "tsx src/automation/capture.ts",
+    "voiceover": "tsx src/automation/generate-voiceover.ts",
+    "preview": "remotion preview src/index.ts",
+    "render": "remotion render src/index.ts PromoVideo out/promo.mp4",
+    "render:15s": "remotion render src/index.ts PromoVideo-15s out/promo-15s.mp4",
+    "render:60s": "remotion render src/index.ts PromoVideo-60s out/promo-60s.mp4"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.282",
+    "@remotion/player": "^4.0.282",
+    "react": "^18.3.1",
+    "remotion": "^4.0.282"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^22.18.12",
+    "@types/react": "^18.3.12",
+    "elevenlabs": "^0.18.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.9.3"
+  }
+}
