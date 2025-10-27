@@ -4,6 +4,7 @@ import Actions from '../components/Actions.svelte'
 import Editor from '../components/Editor.svelte'
 import Header from '../components/Header.svelte'
 import ReadOnlyBanner from '../components/ReadOnlyBanner.svelte'
+import Welcome from '../components/Welcome.svelte'
 
 import { db, terminal, editor } from '$lib/state'
 import { page } from '$app/state'
@@ -55,7 +56,7 @@ $effect(() => {
 <svelte:head>
   <title>PyREPL - Web Based Python Environment</title>
 </svelte:head>
-<!-- <Welcome /> -->
+<Welcome />
 <main
   class="gap-2 p-2 bg-slate-2 overflow-hidden transition-all"
   class:biggerTerminal={terminal.expanded}
