@@ -60,6 +60,7 @@ $effect(() => {
 <main
   class="gap-2 p-2 bg-slate-2 overflow-hidden transition-all"
   class:biggerTerminal={terminal.expanded}
+  class:fullWidthTerminal={terminal.fullWidth}
   class:readOnly={editor.readOnly}
 >
   <Header />
@@ -68,7 +69,9 @@ $effect(() => {
 
   <Actions />
 
+  {#if !terminal.fullWidth}
   <Editor />
+  {/if}
 
   <Terminal />
 </main>
@@ -115,6 +118,19 @@ main.readOnly {
 
   main.biggerTerminal {
     grid-template-columns: minmax(384px, 0.8fr) 1.2fr;
+  }
+
+  main.fullWidthTerminal {
+    grid-template-areas:
+      "header actions"
+      "output output";
+  }
+
+  main.fullWidthTerminal.readOnly {
+    grid-template-areas:
+      "header actions"
+      "banner"
+      "output output";
   }
 }
 

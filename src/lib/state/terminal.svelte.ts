@@ -4,6 +4,7 @@ class TerminalState {
   el: Terminal | undefined = $state()
   resize: () => void = $state(() => {})
   expanded = $state(false)
+  fullWidth = $state(false)
   currentLine = $state('')
   waitingForInput = $state(false)
 
