@@ -6,7 +6,7 @@ import Header from '../components/Header.svelte'
 import ReadOnlyBanner from '../components/ReadOnlyBanner.svelte'
 import Welcome from '../components/Welcome.svelte'
 
-import { db, terminal, editor } from '$lib/state'
+import { repls, terminal, editor } from '$lib/state'
 import { page } from '$app/state'
 import { atou } from '$lib'
 
@@ -31,21 +31,21 @@ $effect(() => {
         console.warn('[pyrepl] invalid shared code in url')
       }
     }
-  } else if (db.ready && lastLoadedId !== db.currentReplId) {
-    lastLoadedId = db.currentReplId ?? ''
+  } else if (repls.ready && lastLoadedId !== repls.currentReplId) {
+    lastLoadedId = repls.currentReplId ?? ''
     console.debug('[pyrepl] loading code from indexedb')
-    editor.value = db.getCurrentRepl()?.code ?? ''
+    editor.value = repls.getCurrentRepl()?.code ?? ''
   }
 })
 
 $effect(() => {
-  if (db.ready && !editor.readOnly) {
-    const currentRepl = db.getCurrentRepl()
+  if (repls.ready && !editor.readOnly) {
+    const currentRepl = repls.getCurrentRepl()
     if (currentRepl === undefined) {
       console.warn('[pyrepl] unable to find current repl')
     } else if (editor.value !== currentRepl.code) {
       console.debug('[pyrepl] updating code in indexedb')
-      db.updateCurrentRepl(editor.value)
+      repls.updateCurrentRepl(editor.value)
     }
   }
 })

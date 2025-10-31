@@ -1,5 +1,5 @@
 <script lang="ts">
-import { db, editor } from '$lib/state'
+import { repls, editor } from '$lib/state'
 import { goto } from '$app/navigation'
 import Button from './ui/Button.svelte'
 import { page } from '$app/state'
@@ -7,13 +7,13 @@ import { page } from '$app/state'
 let sharedName = $derived(page.url.searchParams.get('name'))
 
 async function saveAsNew() {
-  if (!db.ready) return
+  if (!repls.ready) return
 
-  const id = await db.create({
+  const id = await repls.create({
     name: sharedName ?? 'Untitled',
     code: editor.value,
   })
-  db.setCurrentId(id)
+  repls.setCurrentId(id)
   editor.readOnly = false
   goto('/')
 }

@@ -1,8 +1,8 @@
 import { REPLCollection, type REPL } from '$lib/db.svelte'
 import { nanoid } from 'nanoid'
 
-class DBState {
-  repls: REPLCollection = new REPLCollection()
+class REPLState {
+  store: REPLCollection = new REPLCollection()
 
   ready: boolean = $state(false)
 
@@ -14,12 +14,12 @@ class DBState {
   }
 
   getCurrentRepl() {
-    return this.repls.findOne({ id: { $eq: this.currentReplId ?? '' } })
+    return this.store.findOne({ id: { $eq: this.currentReplId ?? '' } })
   }
 
   updateCurrentRepl(code: string) {
     if (this.currentReplId === null || !this.ready) return
-    this.repls.updateOne(
+    this.store.updateOne(
       { id: { $eq: this.currentReplId } },
       { $set: { code, updated: new Date().toISOString() } },
     )
@@ -29,7 +29,7 @@ class DBState {
     if (this.currentReplId === null || !this.ready) return
     const trimmedName = name.trim()
     if (trimmedName === '') return
-    this.repls.updateOne(
+    this.store.updateOne(
       { id: { $eq: this.currentReplId } },
       { $set: { name: trimmedName, updated: new Date().toISOString() } },
     )
@@ -42,7 +42,7 @@ class DBState {
 
     // If no custom name provided, check for existing "Untitled" names
     if (value.name === undefined) {
-      const existingNames = this.repls
+      const existingNames = this.store
         .find()
         .fetch()
         .map((repl) => repl.name)
@@ -56,7 +56,7 @@ class DBState {
       }
     }
 
-    return await this.repls.insert({
+    return await this.store.insert({
       id: nanoid(),
       name: finalName,
       code: value.code ?? '',
@@ -68,7 +68,7 @@ class DBState {
   findId(): string | undefined {
     if (!this.ready) throw new Error('Database not ready')
 
-    const repl = this.repls.findOne({})
+    const repl = this.store.findOne({})
 
     return repl?.id
   }
@@ -76,7 +76,7 @@ class DBState {
   async delete(id: string) {
     if (!this.ready) throw new Error('Database not ready')
 
-    this.repls.removeOne({ id: { $eq: id } })
+    this.store.removeOne({ id: { $eq: id } })
 
     if (this.currentReplId === id) {
       const nextId = this.findId()
@@ -92,17 +92,17 @@ class DBState {
   }
 
   constructor() {
-    this.repls.isReady().then(async () => {
+    this.store.isReady().then(async () => {
       this.ready = true
 
-      const count = this.repls.find().count()
+      const count = this.store.find().count()
 
       if (count === 0) {
         const id = await this.create()
 
         this.setCurrentId(id)
       } else {
-        const repl = this.repls.findOne({
+        const repl = this.store.findOne({
           id: { $eq: this.currentReplId ?? '' },
         })
         if (repl === undefined) {
@@ -119,6 +119,6 @@ class DBState {
   }
 }
 
-const db = new DBState()
+const repls = new REPLState()
 
-export { db }
+export { repls }

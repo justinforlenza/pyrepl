@@ -1,6 +1,6 @@
 <script lang="ts">
 import { page } from '$app/state'
-import { db } from '$lib/state'
+import { repls } from '$lib/state'
 
 const MIN_INPUT_WIDTH = 200
 
@@ -25,8 +25,8 @@ $effect(() => {
 })
 
 $effect(() => {
-  if (!db.ready) return
-  const currentRepl = db.getCurrentRepl()
+  if (!repls.ready) return
+  const currentRepl = repls.getCurrentRepl()
   newName = currentRepl?.name ?? 'Untitled'
 })
 
@@ -44,7 +44,7 @@ function startEdit() {
 
 function saveEdit() {
   if (newName.trim() !== '') {
-    db.updateCurrentReplName(newName)
+    repls.updateCurrentReplName(newName)
   }
   isEditing = false
 }
@@ -90,7 +90,7 @@ function handleKeydown(e: KeyboardEvent) {
       class="text-left text-lg font-sans text-slate-8 hover:text-slate-6 transition-all cursor-text px-2 py-1 rounded hover:bg-slate-1 w-full truncate"
       aria-label={'Edit REPL name'}
     >
-      {db.ready ? (db.getCurrentRepl()?.name ?? 'Untitled') : 'Loading...'}
+      {repls.ready ? (repls.getCurrentRepl()?.name ?? 'Untitled') : 'Loading...'}
     </button>
   {/if}
 </div>

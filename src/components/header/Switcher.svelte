@@ -1,29 +1,29 @@
 <script lang="ts">
 import Dialog from '../ui/Dialog.svelte'
 import Button from '../ui/Button.svelte'
-import { db } from '$lib/state'
+import { repls } from '$lib/state'
 
 let open = $state(false)
 
-let repls = $derived(db.ready ? db.repls.find().fetch() : [])
+let userRepls = $derived(repls.ready ? repls.store.find().fetch() : [])
 
 function switchToRepl(id: string) {
-  db.setCurrentId(id)
+  repls.setCurrentId(id)
   open = false
 }
 
 async function createNewRepl() {
-  const id = await db.create()
-  db.setCurrentId(id)
+  const id = await repls.create()
+  repls.setCurrentId(id)
   open = false
 }
 
 async function deleteRepl(id: string) {
-  await db.delete(id)
+  await repls.delete(id)
 }
 
 const sortedRepls = $derived(
-  [...repls].sort(
+  [...userRepls].sort(
     (a, b) => new Date(b.updated).getTime() - new Date(a.updated).getTime(),
   ),
 )
@@ -57,7 +57,7 @@ const sortedRepls = $derived(
     <div class="border-t-1 border-slate-4 pt-3">
       <div class="flex flex-col gap-2 max-h-96 overflow-y-auto">
         {#each sortedRepls as repl (repl.id)}
-          {@const isCurrent = repl.id === db.currentReplId}
+          {@const isCurrent = repl.id === repls.currentReplId}
           <div
             class="flex items-center gap-2 p-3 rounded border-1 transition-all {isCurrent ? 'bg-blue-50 border-blue-4' : 'bg-white border-slate-4 hover:bg-slate-1'}"
           >
@@ -81,7 +81,7 @@ const sortedRepls = $derived(
               </span>
             </button>
 
-            {#if repls.length > 1}
+            {#if userRepls.length > 1}
               <Button
                 onclick={(e) => {
                   e.stopPropagation()
