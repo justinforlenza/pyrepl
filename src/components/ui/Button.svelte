@@ -5,8 +5,6 @@ import type {
   HTMLButtonAttributes,
 } from 'svelte/elements'
 
-import spinner from '../../svg/spinner.svg?raw'
-
 export type ButtonProps = WithElementRef<HTMLButtonAttributes> &
   WithElementRef<HTMLAnchorAttributes> & {
     variant?: 'default' | 'blue' | 'green' | 'red'
@@ -33,7 +31,9 @@ let {
 >
   {#if loading}
     <span class="hidden" aria-live="polite" aria-busy="true">Working ... </span>
-    <div class="absolute fill-green-9 h-full w-full flex justify-center items-center top-0 left-0">{@html spinner}</div>
+    <div class="absolute h-full w-full flex justify-center items-center inset-0">
+      <div class="spinner i-svg-spinners:3-dots-fade size-6"></div>
+    </div>
   {/if}
   {@render children?.()}
 </svelte:element>
@@ -43,8 +43,16 @@ let {
   --at-apply: bg-slate-50 border-slate-4 text-slate-8 hover:bg-slate-1;  /**/
 }
 
+.default  .spinner {
+  --at-apply: text-slate-9; /**/
+}
+
 .blue {
   --at-apply: bg-blue-50 border-blue-4 text-blue-8 hover:bg-blue-1; /**/
+}
+
+.blue .spinner {
+  --at-apply: text-blue-9; /**/
 }
 
 
@@ -52,8 +60,16 @@ let {
   --at-apply: bg-green-50 border-green-4 text-green-8 hover:bg-green-1; /**/
 }
 
+.green .spinner {
+  --at-apply: text-green-9; /**/
+}
+
 .red {
   --at-apply: bg-red-50 border-red-4 text-red-8 hover:bg-red-1; /**/
+}
+
+.red .spinner {
+  --at-apply: text-red-9; /**/
 }
 
 .sm {

@@ -1,6 +1,6 @@
 {
   "name": "pyrepl",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "type": "module",
   "license": "AGPL-3.0-only",
   "scripts": {
@@ -13,9 +13,12 @@
   "devDependencies": {
     "@biomejs/biome": "2.3.1",
     "@fontsource/space-grotesk": "^5.2.10",
+    "@iconify-json/svg-spinners": "^1.2.4",
+    "@iconify-json/teenyicons": "^1.2.2",
     "@sveltejs/kit": "^2.47.3",
     "@sveltejs/vite-plugin-svelte": "^6.2.1",
     "@types/node": "^22.18.12",
+    "@unocss/preset-icons": "^66.5.4",
     "@unocss/preset-web-fonts": "^66.5.4",
     "@unocss/preset-wind3": "^66.5.4",
     "@unocss/reset": "^66.5.4",

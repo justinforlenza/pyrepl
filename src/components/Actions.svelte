@@ -37,9 +37,9 @@ function shareCode() {
       }}
     >
       {#if terminal.expanded}
-        <svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="size-5.75"><path d="M5 14l7-6.5L5 1" stroke="currentColor" stroke-linecap="square"></path></svg>
+        <div class="i-teenyicons:left-outline size-5.75"></div>
       {:else}
-        <svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="size-5.75"><path d="M10 14L3 7.5 10 1" stroke="currentColor" stroke-linecap="square"></path></svg>
+        <div class="i-teenyicons:right-outline size-5.75"></div>
       {/if}
     </Button>
     <Button
@@ -55,9 +55,9 @@ function shareCode() {
       }}
     >
       {#if terminal.fullWidth}
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-5.75" viewBox="0 0 15 15"><!-- Icon from Teenyicons by smhmd - https://github.com/teenyicons/teenyicons/blob/master/LICENSE --><path fill="none" stroke="currentColor" d="M9.5 9.5H13m-3.5 0V13m0-3.5l4 4m-.5-8H9.5m0 0V2m0 3.5l4-4M2 5.5h3.5m0 0V2m0 3.5l-4-4m4 11.5V9.5m0 0H2m3.5 0l-4 4"/></svg>
+        <div class="i-teenyicons:minimise-outline size-5.75"></div>
       {:else}
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-5.75" viewBox="0 0 15 15"><!-- Icon from Teenyicons by smhmd - https://github.com/teenyicons/teenyicons/blob/master/LICENSE --><path fill="none" stroke="currentColor" d="M13.5 13.5H10m3.5 0V10m0 3.5l-4-4m.5-8h3.5m0 0V5m0-3.5l-4 4M5 1.5H1.5m0 0V5m0-3.5l4 4m-4 4.5v3.5m0 0H5m-3.5 0l4-4"/></svg>      
+        <div class="i-teenyicons:expand-outline size-5.75"></div>
       {/if}
     </Button>
   </div>
