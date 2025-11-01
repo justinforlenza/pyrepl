@@ -4,7 +4,9 @@ PyREPL is a simple web based Python REPL created using the [Pyodide](https://pyo
 ## How
 By using Pyodide there is no need server/backend for running any code, it is all done in the client's browser. This reduces complexity and make's it super portable. 
 
-Code contents are compressed and base64 encoded into the URL using [fflate](https://github.com/101arrowz/fflate). This means your code is not stored on any server, but still shareable with unique links.
+Code is stored locally in your browser using IndexedDB, so it persists between visits and never leaves your device. 
+
+To share, the REPL is compressed utilizing [fflate](https://github.com/101arrowz/fflate), and URL-encoded into a single query parameter to produce a shareable link.
 
 ## Why
 I primarily developed this for my own classroom when I teach a small Python foundations unit, it allows me to introduce students to the Python language without needing to setup and entire development environment. 
