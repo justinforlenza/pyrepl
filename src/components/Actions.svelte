@@ -37,9 +37,9 @@ function shareCode() {
       }}
     >
       {#if terminal.expanded}
-        <div class="i-teenyicons:left-outline size-5.75"></div>
-      {:else}
         <div class="i-teenyicons:right-outline size-5.75"></div>
+      {:else}
+        <div class="i-teenyicons:left-outline size-5.75"></div>
       {/if}
     </Button>
     <Button
