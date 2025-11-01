@@ -79,7 +79,7 @@ function handleKeydown(e: KeyboardEvent) {
       onkeydown={handleKeydown}
       onblur={saveEdit}
       style="width: {inputWidth}px; max-width: 100%;"
-      class="text-lg font-sans bg-white border-1 border-slate-4 rounded px-2 py-1 text-slate-8 outline-none focus:border-blue-4 transition-all"
+      class="text-lg font-sans bg-white border-1 border-slate-4 rounded px-2 py-1 text-slate-8 outline-none transition-all"
       type="text"
       aria-label="New REPL Name"
       placeholder="REPL name"
@@ -87,8 +87,9 @@ function handleKeydown(e: KeyboardEvent) {
   {:else}
     <button
       onclick={startEdit}
-      class="text-left text-lg font-sans text-slate-8 hover:text-slate-6 transition-all cursor-text px-2 py-1 rounded hover:bg-slate-1 w-full truncate"
-      aria-label={'Edit REPL name'}
+      style="width: {inputWidth}px"
+      class="text-left text-lg font-sans min-w-50 text-slate-8 hover:text-slate-6 transition-all cursor-text px-2 py-1 rounded hover:bg-slate-1 w-full truncate"
+      aria-label="Edit REPL name"
     >
       {repls.ready ? (repls.getCurrentRepl()?.name ?? 'Untitled') : 'Loading...'}
     </button>
