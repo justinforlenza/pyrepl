@@ -30,14 +30,25 @@ worker.onStderr = (message) => {
   terminal.el.write(`\x1b[31m ${message}`)
 }
 
-const onLoad = async (terminal: Terminal) => {
+const onLoad = async (term: Terminal) => {
+  console.debug('[pyrepl][terminal] terminal loaded')
+  console.debug('[pyrepl][terminal] loading fit addon')
   const fitAddon = new (await XtermAddon.FitAddon()).FitAddon()
-  terminal.loadAddon(fitAddon)
+  console.debug('[pyrepl][terminal] fit addon loaded, applying to terminal')
+  term.loadAddon(fitAddon)
+  console.debug(
+    '[pyrepl][terminal] fit addon applied, fitting terminal to container',
+  )
   fitAddon.fit()
+  console.debug('[pyrepl][terminal] terminal fitted to container')
 
-  terminal.resize = () => fitAddon.fit()
+  console.debug('[pyrepl][terminal] setting resize function')
+  terminal.resize = () => {
+    console.debug('[pyrepl][terminal] resizing terminal')
+    fitAddon.fit()
+  }
 
-  terminal.writeln('Initializing Python Environment ....')
+  term.writeln('Initializing Python Environment ....')
 }
 
 const onKey = async ({

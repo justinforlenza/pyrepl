@@ -32,6 +32,7 @@ function shareCode() {
       onclick={() => {
         terminal.expanded = !terminal.expanded
         setTimeout(()=> {
+          console.debug('[pyrepl][actions] resizing terminal after expand toggle')
           terminal.resize()
         }, 250)
       }}
