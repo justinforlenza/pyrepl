@@ -22,18 +22,28 @@ async function loadPyodideAndPackages() {
     stdin: () => {
       self.postMessage({ type: eventType.stdin })
 
-      Atomics.wait(syncArray, 0, 0)
+      while (true) {
+        const wait = Atomics.wait(syncArray, 0, 0, 100)
+
+        self.pyodide.checkInterrupt()
+
+        if (wait === 'ok') {
+          break
+        }
+      }
 
       const length = syncArray[1]
 
       const bytes = inputArray.slice(0, length)
       const input = new TextDecoder().decode(bytes)
 
+
       Atomics.store(syncArray, 0, 0)
 
       return input
     },
-    stderr: () => {
+    stderr: (e) => {
+      console.debug(e)
       console.debug('uh-oh')
     },
   })
@@ -61,6 +71,11 @@ self.onmessage = async (e: MessageEvent<WorkerEvent>) => {
         self.postMessage({ type: eventType.stderr, message: err.message })
       }
       self.postMessage({ type: eventType.complete })
+      break
+    case eventType.setInterupt:
+      await pyodideReadyPromise
+      console.debug('[pyrepl][worker] setting interrupt buffer')
+      self.pyodide.setInterruptBuffer(e.data.buffer)
       break
     default:
       break

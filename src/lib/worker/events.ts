@@ -5,6 +5,7 @@ export const eventType = {
   stderr: 'STDERR',
   ready: 'READY',
   complete: 'COMPLETE',
+  setInterupt: 'SET_INTERRUPT',
 } as const
 
 export type EventType = (typeof eventType)[keyof typeof eventType]
@@ -40,6 +41,11 @@ interface CompleteEvent {
   type: (typeof eventType)['complete']
 }
 
+interface SetInterruptEvent {
+  type: (typeof eventType)['setInterupt']
+  buffer: Uint8Array<SharedArrayBuffer>
+}
+
 export type WorkerEvent =
   | RunEvent
   | StdInEvent
@@ -47,3 +53,4 @@ export type WorkerEvent =
   | StdOutEvent
   | StdErrorEvent
   | CompleteEvent
+  | SetInterruptEvent

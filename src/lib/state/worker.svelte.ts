@@ -11,6 +11,8 @@ class WorkerState {
   running = $state(false)
   ready = $state(false)
 
+  interuptBuffer = new Uint8Array(new SharedArrayBuffer(1))
+
   onStdin: (() => void) | undefined
   onStdout: ((charCode: number) => void) | undefined
   onReady: ((buffers: ReadyEvent['buffers']) => void) | undefined
@@ -18,10 +20,17 @@ class WorkerState {
 
   run(code: string) {
     if (this.running || !this.ready) return
+    this.interuptBuffer[0] = 0
 
     this.running = true
     this._worker.postMessage({ type: eventType.run, code })
   }
+
+  interupt() {
+    console.debug('[pyrepl][worker] interupting execution')
+    this.interuptBuffer[0] = 2
+  }
+
 
   constructor() {
     this._worker = new Worker()
@@ -53,6 +62,8 @@ class WorkerState {
           break
       }
     }
+
+    this._worker.postMessage({ type: eventType.setInterupt, buffer: this.interuptBuffer })
   }
 }
 

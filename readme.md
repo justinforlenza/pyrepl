@@ -17,6 +17,7 @@ I also personally want to quickly just test/share some Python code and I couldn'
 - Single file only
 - No 3rd party packages
 - [Pyodide Python compatibility](https://pyodide.org/en/stable/usage/wasm-constraints.html)
+- Unable to interupt `time.sleep()` (pyodide/pyodide#5927)
 
 ## Acknowledgements
 - The amazing [Pyodide](https://github.com/pyodide) team who without their WASM port of CPython none of this would be possible

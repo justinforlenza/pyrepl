@@ -5,8 +5,16 @@ import { terminal, worker, editor, repls } from '$lib/state'
 import Button from './ui/Button.svelte'
 
 function runPython() {
+  if (worker.running || !worker.ready) return
   terminal.reset()
-  worker.run(editor.value)
+  setTimeout(() => {
+    worker.run(editor.value)
+  }, 100)
+}
+
+function stopPython() {
+  worker.interupt()
+  terminal.waitingForInput = false
 }
 
 function shareCode() {
@@ -63,16 +71,25 @@ function shareCode() {
     </Button>
   </div>
   <div class="flex gap-4 items-center">
-    <Button
-      variant="green"
-      aria-details="run code"
-      onclick={runPython}
-      loading={worker.running}
-    >
-      Run
-    </Button>
+    {#if worker.running}
+      <Button
+        variant="red"
+        aria-details="stop running code in code repl"
+        onclick={stopPython}
+      >
+        Stop
+      </Button>
+    {:else}
+      <Button
+        variant="green"
+        aria-details="run code in code repl"
+        onclick={runPython}
+      >
+        Run
+      </Button>
+    {/if}
 
-    <Button 
+    <Button
       variant="blue"
       aria-details="copy share link to code repl"
       onclick={shareCode}
