@@ -7,7 +7,7 @@ let syncArray: Int32Array
 
 worker.onStdout = (buffer) => {
   if (terminal.el === undefined) return
-  console.debug(`[pyrepl][terminal] received stdout char code: ${buffer}`)
+  console.debug(`[pyrepl][terminal] received stdout buffer:`, buffer)
   terminal.el.write(buffer)
 }
 
