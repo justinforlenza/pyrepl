@@ -51,7 +51,6 @@ async function loadPyodideAndPackages() {
   self.pyodide.setStdout({
     write: (buffer) => {
       console.debug('[pyrepl][worker] stdout write called')
-      // console.debug('[pyrepl][worker] buffer:', buffer)
       self.postMessage({
         type: eventType.stdout,
         buffer,
