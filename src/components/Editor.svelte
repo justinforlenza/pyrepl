@@ -9,6 +9,7 @@ import { editor } from '$lib/state'
   bind:value={editor.value}
   readonly={editor.readOnly}
   lang={python()}
+  tabSize={4}
   class="rounded-lg overflow-hidden bg-white transition-all border-1 border-slate-4"
   styles={{
     '&': {
