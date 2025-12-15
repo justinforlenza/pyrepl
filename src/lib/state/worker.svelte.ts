@@ -14,7 +14,7 @@ class WorkerState {
   interuptBuffer = new Uint8Array(new SharedArrayBuffer(1))
 
   onStdin: (() => void) | undefined
-  onStdout: ((charCode: number) => void) | undefined
+  onStdout: ((buffer: Uint8Array<ArrayBufferLike>) => void) | undefined
   onReady: ((buffers: ReadyEvent['buffers']) => void) | undefined
   onStderr: ((message: string) => void) | undefined
 
@@ -42,7 +42,7 @@ class WorkerState {
           break
 
         case eventType.stdout:
-          this.onStdout?.(e.data.charCode)
+          this.onStdout?.(e.data.buffer)
           break
 
         case eventType.stdin:

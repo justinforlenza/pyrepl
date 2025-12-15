@@ -49,7 +49,17 @@ async function loadPyodideAndPackages() {
   })
 
   self.pyodide.setStdout({
-    raw: (charCode) => self.postMessage({ type: eventType.stdout, charCode }),
+    // raw: (charCode) => self.postMessage({ type: eventType.stdout, charCode }),
+    write: (buffer) => {
+      console.debug('[pyrepl][worker] stdout write called')
+      // console.debug('[pyrepl][worker] buffer:', buffer)
+      self.postMessage({
+        type: eventType.stdout,
+        buffer,
+      })
+
+      return buffer.length
+    },
   })
 
   self.postMessage({
