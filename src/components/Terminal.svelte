@@ -5,9 +5,10 @@ import { worker, terminal } from '$lib/state'
 let inputArray: Uint8Array
 let syncArray: Int32Array
 
-worker.onStdout = (charCode) => {
+worker.onStdout = (buffer) => {
   if (terminal.el === undefined) return
-  terminal.el.write(String.fromCharCode(charCode))
+  console.debug(`[pyrepl][terminal] received stdout buffer:`, buffer)
+  terminal.el.write(buffer)
 }
 
 worker.onStdin = () => {

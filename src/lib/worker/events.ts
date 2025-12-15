@@ -29,7 +29,7 @@ export interface ReadyEvent {
 
 interface StdOutEvent {
   type: (typeof eventType)['stdout']
-  charCode: number
+  buffer: Uint8Array<ArrayBufferLike>
 }
 
 interface StdErrorEvent {
