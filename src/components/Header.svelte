@@ -1,44 +1,80 @@
 <script lang="ts">
-import Button from './ui/Button.svelte'
-import Switcher from './header/Switcher.svelte'
-import Name from './header/Name.svelte'
 import { editor } from '$lib/state'
 import { page } from '$app/state'
+
+import Switcher from './header/Switcher.svelte'
+import Name from './header/Name.svelte'
+
+import GithubOutline from '~icons/teenyicons/github-outline'
 
 let sharedName = $derived(page.url.searchParams.get('name'))
 </script>
 
-<header class="grid-area-[header] flex items-center px-2 justify-between overflow-hidden">
-  <div class="flex items-center gap-2 md:gap-5 overflow-hidden">
-    <div class="flex flex-col">
-      <h1 class="text-lg md:text-2xl font-bold font-sans leading-tight">
+<header>
+  <div class="flex">
+    <div class="app-name">
+      <h5>
         PyREPL
-      </h1>
-      <p class="text-xs font-mono text-slate-6 text-center">v{PKG.version}</p>
+      </h5>
+      <small>v{PKG.version}</small>
     </div>
     {#if !editor.readOnly}
-      <div class="text-slate-4 scale-150 md:scale-200">
+      <div class="seperator">
         /
       </div>
       <Name />
       <Switcher />
     {:else if sharedName}
-      <div class="text-slate-4 scale-150 md:scale-200">
+      <div class="seperator">
         /
       </div>
-      <span class="text-lg font-sans px-2 py-1">
+      <span>
         {sharedName}
       </span>
     {/if}
   </div>
-  <Button
+  <a
     href="https://github.com/justinforlenza/pyrepl"
     target="_blank"
     aria-label="view source code"
     title="View Source Code"
-    class="ml-3"
+    class="btn"
   >
-    <div class="i-teenyicons:github-outline size-5.75"></div>
-  </Button>
+    <GithubOutline />
+</a>
 </header>
 
+<style>
+  header {
+    grid-area: header;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-inline: var(--pad-s);
+    overflow: hidden;
+    gap: var(--pad-s);
+
+    > div:first-child {
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .app-name {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      h5 {
+        line-height: var(--lh-s);
+      }
+      small {
+        font-family: monospace;
+        color: var(--slate-6);
+      }
+    }
+
+    .seperator {
+      color: var(--slate-5);
+      scale: 1.5;
+    }
+  }
+</style>

@@ -37,7 +37,6 @@ async function loadPyodideAndPackages() {
       const bytes = inputArray.slice(0, length)
       const input = new TextDecoder().decode(bytes)
 
-
       Atomics.store(syncArray, 0, 0)
 
       return input
@@ -50,7 +49,7 @@ async function loadPyodideAndPackages() {
 
   self.pyodide.setStdout({
     write: (buffer) => {
-      console.debug('[pyrepl][worker] stdout write called')
+      console.debug('[pyrepl:worker] stdout write called')
       self.postMessage({
         type: eventType.stdout,
         buffer,
@@ -82,7 +81,7 @@ self.onmessage = async (e: MessageEvent<WorkerEvent>) => {
       break
     case eventType.setInterupt:
       await pyodideReadyPromise
-      console.debug('[pyrepl][worker] setting interrupt buffer')
+      console.debug('[pyrepl:worker] setting interrupt buffer')
       self.pyodide.setInterruptBuffer(e.data.buffer)
       break
     default:

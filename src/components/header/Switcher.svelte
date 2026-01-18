@@ -1,6 +1,7 @@
 <script lang="ts">
-import Dialog from '../ui/Dialog.svelte'
-import Button from '../ui/Button.svelte'
+import DocumentsOutline from '~icons/teenyicons/documents-outline'
+import BinOutline from '~icons/teenyicons/bin-outline'
+
 import { repls } from '$lib/state'
 
 let open = $state(false)
@@ -30,74 +31,139 @@ const sortedRepls = $derived(
 </script>
 
 
-<Button
+<button
   onclick={() => (open = true)}
   aria-label="Open REPL Management"
   title="Manage Your REPLs"
+  command="show-modal"
+  commandfor="repl-switcher"
 >
-  <div class="i-teenyicons-documents-outline size-5.75"></div>
-</Button>
+  <DocumentsOutline />
+</button>
 
-<Dialog bind:open>
-  {#snippet title()}
-    <h2 class="text-2xl font-bold text-slate-8">Your REPLs</h2>
-  {/snippet}
+<dialog id="repl-switcher" closedby="any">
+  <h5>Your REPLs</h5>
 
-  <div class="flex flex-col gap-3 overflow-hidden">
-    <Button
-      variant="green"
+  <div class="stack">
+    <button
+      class="success block"
       onclick={createNewRepl}
-      class="w-full"
       aria-label="Create new REPL"
       title="Create New REPL"
     >
       New REPL
-    </Button>
-
-    <div class="border-t-1 border-slate-4 pt-3">
-      <div class="flex flex-col gap-2 max-h-96 overflow-y-auto">
-        {#each sortedRepls as repl (repl.id)}
-          {@const isCurrent = repl.id === repls.currentReplId}
-          <div
-            class="flex items-center gap-2 p-3 rounded border-1 transition-all {isCurrent ? 'bg-blue-50 border-blue-4' : 'bg-white border-slate-4 hover:bg-slate-1'}"
+    </button>
+    <hr />
+    <div class="reel">
+      {#each sortedRepls as repl (repl.id)}
+        {@const isCurrent = repl.id === repls.currentReplId}
+        <div
+          class:current={isCurrent}
+          class="repl"
+        >
+          <button
+            onclick={() => switchToRepl(repl.id)}
+            class="unstyled"
+            aria-label="Switch to {repl.name}"
           >
-            <button
-              onclick={() => switchToRepl(repl.id)}
-              class="flex-1 text-left min-w-0"
-              aria-label="Switch to {repl.name}"
-            >
-              <div class="flex items-center gap-2 mb-1">
-                <span class="font-sans text-lg text-slate-8 truncate">
-                  {repl.name}
-                </span>
-                {#if isCurrent}
-                  <span class="text-xs font-mono text-blue-8 bg-blue-1 px-2 py-1 rounded whitespace-nowrap">
-                    Current
-                  </span>
-                {/if}
-              </div>
-              <span class="text-sm text-slate-6 font-mono">
-                Updated {repl.updated}
+            <div class="cluster">
+              <span>
+                {repl.name}
               </span>
-            </button>
+              {#if isCurrent}
+                <span class="primary tag">
+                  Current
+                </span>
+              {/if}
+            </div>
+            <time class="fluid" datetime={repl.updated}>
+              Updated {repl.updated}
+            </time>
+          </button>
 
-            {#if userRepls.length > 1}
-              <Button
-                onclick={(e) => {
-                  e.stopPropagation()
-                  deleteRepl(repl.id)
-                }}
-                aria-label="Delete {repl.name}"
-                title="Delete REPL"
-                variant="red"
-                size="sm"
-              >
-                <div class="i-teenyicons:bin-outline"></div>
-              </Button>
-            {/if}
-          </div>
-        {/each}
-      </div>
+          {#if userRepls.length > 1}
+            <button
+              onclick={(e) => {
+                e.stopPropagation()
+                deleteRepl(repl.id)
+              }}
+              aria-label="Delete {repl.name}"
+              title="Delete REPL"
+              class="error sm"
+            >
+              <BinOutline />
+            </button>
+          {/if}
+        </div>
+      {/each}
     </div>
   </div>
-</Dialog>
+</dialog>
+
+<style>
+  dialog {
+    max-width: 50ch;
+  }
+  h5 {
+    margin-bottom: var(--vs-s);
+    color: var(--slate-9);
+  }
+
+  .stack {
+    --layout-gap: var(--pad-m);
+  }
+
+  hr {
+    border: 1px solid var(--slate-2);
+  }
+
+  .reel {
+    --layout-gap: var(--pad-s);
+    max-height: 400px;
+    /* overflow-y: scroll; */
+    
+    .repl {
+      display: flex;
+      align-items: center;
+      border-radius: var(--br-s);
+      padding: var(--pad-m);
+      gap: var(--pad-xs);
+
+      background-color: white;
+      border: 1px solid var(--slate-4);
+
+      .cluster {
+        margin-bottom: var(--pad-xs)
+      }
+      .tag {
+        line-height: var(--lh-xs);
+        opacity: .8;
+      }
+
+      
+      &.current {
+        border-color: var(--blue-3);
+        background-color: var(--blue-0);
+      }
+
+      time {
+        opacity: .7;
+        --fl: -1;
+      }
+
+      button.unstyled {
+        color: var(--slate-9);
+        background: none;
+        border: none;
+        cursor: pointer;
+        flex: 1;
+        text-align: left;
+        min-width: 0;
+      }
+
+      button.error.sm {
+        --fl: -1;
+      }
+    }
+  }
+</style>

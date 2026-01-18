@@ -19,6 +19,7 @@
     "fflate",
     "indexeddb",
     "pyodide",
+    "pyrepl",
     "repls",
     "signaldb",
     "unocss"

@@ -58,7 +58,6 @@ $effect(() => {
 </svelte:head>
 <Welcome />
 <main
-  class="gap-2 p-2 bg-slate-2 overflow-hidden transition-all"
   class:biggerTerminal={terminal.expanded}
   class:fullWidthTerminal={terminal.fullWidth}
   class:readOnly={editor.readOnly}
@@ -69,9 +68,8 @@ $effect(() => {
 
   <Actions />
 
-  {#if !terminal.fullWidth}
+
   <Editor />
-  {/if}
 
   <Terminal />
 </main>
@@ -79,7 +77,15 @@ $effect(() => {
 <style>
 main {
   height: 100vh;
+
+  background-color: var(--slate-1);
+
+  padding: var(--pad-s);
+
+  overflow: hidden;
+
   display: grid;
+  gap: var(--pad-s);
   grid-template-rows: repeat(2, 48px 1fr);
   grid-template-columns: 1fr;
   grid-template-areas:
@@ -90,7 +96,7 @@ main {
 }
 
 main.readOnly {
-  grid-template-rows: 48px 64px 1fr 48px 1fr;
+  grid-template-rows: 48px auto 1fr 48px 1fr;
   grid-template-areas:
     "header"
     "banner"
@@ -99,7 +105,19 @@ main.readOnly {
     "output"
 }
 
-@media (min-width: theme('breakpoints.lg')) {
+main.fullWidthTerminal {
+  grid-template-rows: 48px 48px 1fr;
+  grid-template-areas:
+    "header"
+    "actions"
+    "output";
+
+  :global(.editor) {
+    display: none;
+  }
+}
+
+@media (width >= 1024px) {
   main {
     grid-template-columns: 1.2fr minmax(384px, 0.8fr);
     grid-template-rows: 48px 1fr;

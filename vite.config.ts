@@ -1,6 +1,7 @@
 import { sveltekit } from '@sveltejs/kit/vite'
-import UnoCSS from '@unocss/svelte-scoped/vite'
 import { defineConfig } from 'vite'
+
+import Icons from 'unplugin-icons/vite'
 
 import { copyFile, mkdir } from 'node:fs/promises'
 import { readFileSync } from 'node:fs'
@@ -16,9 +17,7 @@ console.log(typeof pkg.version)
 export default defineConfig({
   plugins: [
     sveltekit(),
-    UnoCSS({
-      injectReset: '@unocss/reset/tailwind.css',
-    }),
+    Icons({ compiler: 'svelte' }),
     {
       name: 'vite-plugin-pyodide',
       buildStart: async () => {

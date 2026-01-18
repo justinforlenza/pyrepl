@@ -7,7 +7,7 @@ let syncArray: Int32Array
 
 worker.onStdout = (buffer) => {
   if (terminal.el === undefined) return
-  console.debug(`[pyrepl][terminal] received stdout buffer:`, buffer)
+  console.debug(`[pyrepl:terminal] received stdout buffer:`, buffer)
   terminal.el.write(buffer)
 }
 
@@ -32,20 +32,20 @@ worker.onStderr = (message) => {
 }
 
 const onLoad = async (term: Terminal) => {
-  console.debug('[pyrepl][terminal] terminal loaded')
-  console.debug('[pyrepl][terminal] loading fit addon')
+  console.debug('[pyrepl:terminal] terminal loaded')
+  console.debug('[pyrepl:terminal] loading fit addon')
   const fitAddon = new (await XtermAddon.FitAddon()).FitAddon()
-  console.debug('[pyrepl][terminal] fit addon loaded, applying to terminal')
+  console.debug('[pyrepl:terminal] fit addon loaded, applying to terminal')
   term.loadAddon(fitAddon)
   console.debug(
-    '[pyrepl][terminal] fit addon applied, fitting terminal to container',
+    '[pyrepl:terminal] fit addon applied, fitting terminal to container',
   )
   fitAddon.fit()
-  console.debug('[pyrepl][terminal] terminal fitted to container')
+  console.debug('[pyrepl:terminal] terminal fitted to container')
 
-  console.debug('[pyrepl][terminal] setting resize function')
+  console.debug('[pyrepl:terminal] setting resize function')
   terminal.resize = () => {
-    console.debug('[pyrepl][terminal] resizing terminal')
+    console.debug('[pyrepl:terminal] resizing terminal')
     fitAddon.fit()
   }
 
@@ -94,5 +94,14 @@ const onKey = async ({
     fontSize: 18,
     convertEol: true
   }}
-  class='rounded-lg overflow-auto grid-area-[output] bg-black transition-all'
+  class="terminal"
 />
+
+<style>
+  :global(.terminal) {
+    grid-area: output;
+    overflow: auto;
+    background-color: black;
+    border-radius: var(--br-m);
+  }
+</style>

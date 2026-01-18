@@ -10,7 +10,7 @@ import { editor } from '$lib/state'
   readonly={editor.readOnly}
   lang={python()}
   tabSize={4}
-  class="rounded-lg overflow-hidden bg-white transition-all border-1 border-slate-4"
+  class="editor"
   styles={{
     '&': {
       height: '100%',
@@ -18,3 +18,13 @@ import { editor } from '$lib/state'
     }
   }}
 />
+
+<style>
+  :global(.editor) {
+    grid-area: editor;
+    background-color: white;
+    border-radius: var(--br-m);
+    overflow: hidden;
+    border: 1px solid var(--slate-3);
+  }
+</style>
