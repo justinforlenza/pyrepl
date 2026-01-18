@@ -139,15 +139,17 @@ main.fullWidthTerminal {
   }
 
   main.fullWidthTerminal {
+    grid-template-rows: 48px 1fr;
     grid-template-areas:
       "header actions"
       "output output";
   }
 
   main.fullWidthTerminal.readOnly {
+    grid-template-rows: 48px auto 1fr;
     grid-template-areas:
       "header actions"
-      "banner"
+      "banner banner"
       "output output";
   }
 }
