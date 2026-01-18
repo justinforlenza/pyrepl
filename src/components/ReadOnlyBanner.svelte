@@ -1,7 +1,6 @@
 <script lang="ts">
 import { repls, editor } from '$lib/state'
 import { goto } from '$app/navigation'
-import Button from './ui/Button.svelte'
 import { page } from '$app/state'
 
 let sharedName = $derived(page.url.searchParams.get('name'))
