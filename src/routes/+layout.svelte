@@ -1,5 +1,6 @@
 <script lang="ts">
-import '@fontsource/space-grotesk/latin.css'
+import '@teach-stack/css'
+import '@fontsource-variable/space-grotesk'
 let { children } = $props()
 </script>
 

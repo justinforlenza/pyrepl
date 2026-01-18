@@ -1,5 +1,4 @@
 <script lang="ts">
-import { page } from '$app/state'
 import { repls } from '$lib/state'
 
 const MIN_INPUT_WIDTH = 200
@@ -63,11 +62,11 @@ function handleKeydown(e: KeyboardEvent) {
 </script>
 
 
- <div class="relative md:max-w-96 flex items-center gap-2 overflow-hidden">
+ <div>
   <span
     bind:this={measureElement}
-    class="text-lg font-sans px-2 py-1 absolute invisible whitespace-pre"
     aria-hidden="true"
+    class="fluid"
   >
     {newName}
   </span>
@@ -79,7 +78,6 @@ function handleKeydown(e: KeyboardEvent) {
       onkeydown={handleKeydown}
       onblur={saveEdit}
       style="width: {inputWidth}px; max-width: 100%;"
-      class="text-lg font-sans bg-white border-1 border-slate-4 rounded px-2 py-1 text-slate-8 outline-none transition-all"
       type="text"
       aria-label="New REPL Name"
       placeholder="REPL name"
@@ -88,10 +86,64 @@ function handleKeydown(e: KeyboardEvent) {
     <button
       onclick={startEdit}
       style="width: {inputWidth}px"
-      class="text-left text-lg font-sans min-w-50 text-slate-8 hover:text-slate-6 transition-all cursor-text px-2 py-1 rounded hover:bg-slate-1 w-full truncate"
+      class="unstyled text-left text-lg font-sans min-w-50 text-slate-8 hover:text-slate-6 transition-all cursor-text px-2 py-1 rounded hover:bg-slate-1 w-full truncate"
       aria-label="Edit REPL name"
     >
       {repls.ready ? (repls.getCurrentRepl()?.name ?? 'Untitled') : 'Loading...'}
     </button>
   {/if}
 </div>
+
+<style>
+  div {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    border-radius: var(--br-s);
+
+    &:has(input:focus-visible) {
+      outline: 1px solid var(--blue-5);
+    }
+
+    span {
+      position: absolute;
+      visibility: hidden;
+      padding-inline: var(--pad-s);
+      line-height: var(--lh-xl);
+    }
+
+    button {
+      text-align: left;
+      background-color: transparent;
+      border: 0;
+      color: var(--slate-9);
+      padding-inline: var(--pad-s);
+      line-height: var(--lh-xl);
+      cursor: text;
+
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+
+      &:hover {
+        color: var(--slate-6);
+        background-color: var(--slate-0);
+      }
+    }
+
+    input:focus-visible {
+      outline: none;
+    }
+
+    input {
+      margin-block-end: 0;
+    }
+  }
+
+
+  @media (width >= 1024px) {
+    div {
+      max-width: 350px;
+    }
+  }
+</style>

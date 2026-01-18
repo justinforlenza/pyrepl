@@ -27,10 +27,9 @@ class WorkerState {
   }
 
   interupt() {
-    console.debug('[pyrepl][worker] interupting execution')
+    console.debug('[pyrepl:worker] interupting execution')
     this.interuptBuffer[0] = 2
   }
-
 
   constructor() {
     this._worker = new Worker()
@@ -63,7 +62,10 @@ class WorkerState {
       }
     }
 
-    this._worker.postMessage({ type: eventType.setInterupt, buffer: this.interuptBuffer })
+    this._worker.postMessage({
+      type: eventType.setInterupt,
+      buffer: this.interuptBuffer,
+    })
   }
 }
 

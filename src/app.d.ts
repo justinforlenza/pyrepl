@@ -1,3 +1,5 @@
+import 'unplugin-icons/types/svelte'
+
 declare global {
   const PKG: {
     version: string
@@ -10,5 +12,3 @@ declare global {
     // interface Platform {}
   }
 }
-
-export {}

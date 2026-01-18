@@ -3,7 +3,7 @@ import type { Terminal } from '@battlefieldduck/xterm-svelte'
 class TerminalState {
   el: Terminal | undefined = $state()
   resize: () => void = $state(() => {
-    console.warn('[pyrepl][terminal] resize function not set')
+    console.warn('[pyrepl:terminal] resize function not set')
   })
   expanded = $state(false)
   fullWidth = $state(false)
